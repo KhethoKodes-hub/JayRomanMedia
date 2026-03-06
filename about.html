@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Roman Media · About</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #04020f;
+            --cream: #f5f0e8;
+            --gold: #c9a84c;
+            --gold-light: #e8d08a;
+            --ice: #a8c8e8;
+            --violet: #6a3fa8;
+            --rose: #c86080;
+            --deep: #080520;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--gold); border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-ring {
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(201,168,76,0.5); border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease;
+        }
+
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+        .font-sans-alt { font-family: 'Syne', sans-serif; }
+
+        .glass {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .glass-gold {
+            background: rgba(201,168,76,0.07);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(201,168,76,0.22);
+        }
+        .glass-dark {
+            background: rgba(4,2,15,0.6);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .grad-text {
+            background: linear-gradient(135deg, #f5f0e8 0%, var(--gold-light) 40%, var(--gold) 70%, #e8a060 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .grad-text-ice {
+            background: linear-gradient(135deg, #fff 0%, var(--ice) 60%, #8090d0 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; transition: all 0.4s ease; }
+        nav.scrolled .nav-inner {
+            background: rgba(4,2,15,0.88);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.4rem 3rem; transition: all 0.4s;
+        }
+        .nav-link {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.7); text-decoration: none; position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: var(--gold-light); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: var(--gold-light); }
+        .nav-link.active::after { width: 100%; }
+
+        .divider {
+            width: 60px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .tag {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 0.4rem 1rem; border-radius: 999px;
+            border: 1px solid rgba(201,168,76,0.35);
+            color: var(--gold-light);
+            background: rgba(201,168,76,0.06);
+        }
+
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .hover-card {
+            transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .hover-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(201,168,76,0.05), rgba(106,63,168,0.05));
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .hover-card:hover { transform: translateY(-6px); box-shadow: 0 40px 60px -20px rgba(0,0,0,0.6); }
+        .hover-card:hover::before { opacity: 1; }
+        .hover-card .card-line {
+            position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--violet));
+            transition: width 0.5s ease;
+        }
+        .hover-card:hover .card-line { width: 100%; }
+
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.25,.8,.25,1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes shimmer {
+            0%{background-position:-200% 0} 100%{background-position:200% 0}
+        }
+        .shimmer {
+            background: linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .flare {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            filter: blur(80px); opacity: 0.1;
+        }
+
+        .btn-gold {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #c9a84c, #e8d08a, #c9a84c);
+            background-size: 200% 100%; background-position: 100%;
+            color: var(--ink); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px;
+            border: none; cursor: none;
+            transition: background-position 0.4s ease, transform 0.2s, box-shadow 0.3s;
+            font-weight: 700; text-decoration: none; display: inline-block;
+        }
+        .btn-gold:hover {
+            background-position: 0%;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -8px rgba(201,168,76,0.5);
+        }
+        .btn-outline {
+            background: transparent;
+            color: rgba(255,255,255,0.85); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.2); cursor: none;
+            transition: border-color 0.3s, color 0.3s, background 0.3s;
+            font-weight: 600; text-decoration: none; display: inline-block;
+        }
+        .btn-outline:hover {
+            border-color: rgba(201,168,76,0.5);
+            color: var(--gold-light);
+            background: rgba(201,168,76,0.06);
+        }
+
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem,6vw,5rem);
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 20%, var(--gold-light) 80%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .grain::after {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; opacity: 0.3; border-radius: inherit;
+        }
+
+        .timeline-line {
+            position: absolute; left: 19px; top: 0; bottom: 0; width: 1px;
+            background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+        }
+
+        @media(max-width:768px){
+            .nav-inner { padding: 1rem 1.5rem; }
+            .nav-links-desktop { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="mainNav">
+    <div class="nav-inner">
+        <a href="index.html" style="text-decoration:none">
+            <div>
+                <span class="font-display" style="font-size:1.6rem;font-weight:600;background:linear-gradient(135deg,#fff,var(--gold-light));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:0.02em;">Jay Roman</span>
+                <span class="font-sans-alt" style="font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.7);display:block;margin-top:-2px;padding-left:2px;">Media · beyond the lens</span>
+            </div>
+        </a>
+        <div class="nav-links-desktop" style="display:flex;gap:2.5rem;">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="about.html" class="nav-link active">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <a href="contact.html" class="btn-gold" style="font-size:0.65rem;padding:0.6rem 1.4rem;">Book Session</a>
+    </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section style="position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;" class="grain">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1519741497674-611481863552?q=90&w=2100&auto=format&fit=crop') center/cover; transform:scale(1.05); transition:transform 8s ease;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(115deg,rgba(4,2,15,0.92) 0%,rgba(20,10,40,0.7) 45%,rgba(4,2,15,0.5) 100%);"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,var(--deep),transparent);"></div>
+
+    <div class="flare" style="width:500px;height:500px;background:var(--gold);top:-100px;right:5%;"></div>
+    <div class="flare" style="width:350px;height:350px;background:var(--violet);bottom:5%;left:0%;"></div>
+
+    <div style="position:relative;width:100%;max-width:1400px;margin:0 auto;padding:0 3rem;padding-top:8rem;">
+        <div style="max-width:780px;">
+            <div class="tag float" style="margin-bottom:2rem;">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+                Our Story · Est. 2016
+            </div>
+            <h1 class="font-display grad-text" style="font-size:clamp(3.5rem,9vw,8rem);line-height:0.92;font-weight:300;letter-spacing:-0.01em;margin-bottom:2rem;">
+                Beyond<br>
+                <em style="font-style:italic;">photography</em><br>
+                <span style="font-weight:600;">— purpose.</span>
+            </h1>
+            <p style="max-width:520px;color:rgba(255,255,255,0.65);line-height:1.8;font-size:1.05rem;margin-bottom:3rem;">
+                We create media solutions that empower individuals, companies & communities — blending technical mastery with authentic human connection.
+            </p>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                <a href="contact.html" class="btn-gold">Work with us</a>
+                <a href="#story" class="btn-outline">Our story ↓</a>
+            </div>
+        </div>
+
+        <!-- floating stat row -->
+        <div style="display:flex;gap:3rem;margin-top:5rem;flex-wrap:wrap;">
+            <div>
+                <div class="stat-num">9+</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Years of craft</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+            <div>
+                <div class="stat-num">3</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Major clients</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+            <div>
+                <div class="stat-num">1</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Clear vision</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+            <div>
+                <div class="stat-num">∞</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Moments captured</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ STORY / INTRO ═══════ -->
+<section id="story" style="padding:8rem 3rem;position:relative;overflow:hidden;">
+    <div class="flare" style="width:600px;height:600px;background:var(--violet);top:-100px;left:-200px;opacity:0.06;"></div>
+    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
+
+        <div class="reveal">
+            <p class="section-label" style="margin-bottom:1rem;">Introduction</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1;margin-bottom:2rem;">
+                Jay Roman<br><em>Media</em>
+            </h2>
+            <div class="divider" style="margin-bottom:2rem;"></div>
+            <p style="color:rgba(255,255,255,0.7);line-height:1.9;font-size:0.95rem;margin-bottom:1.5rem;">
+                Jay B Roman Media is a visual content creation company based in Kathu, founded in 2016 by John Roman. We specialise in corporate, lifestyle, and maternity photography.
+            </p>
+            <p style="color:rgba(255,255,255,0.7);line-height:1.9;font-size:0.95rem;margin-bottom:1.5rem;">
+                Unlike traditional photographers who merely capture images, we create media solutions tailored to help individuals and companies present themselves powerfully and professionally.
+            </p>
+            <div class="glass-gold" style="border-radius:16px;padding:1.5rem 2rem;margin-top:2rem;position:relative;overflow:hidden;">
+                <div class="shimmer" style="position:absolute;inset:0;border-radius:16px;pointer-events:none;"></div>
+                <p class="font-display" style="font-size:1.2rem;font-style:italic;color:rgba(255,255,255,0.9);line-height:1.6;">
+                    "We aim to uplift communities by creating jobs while delivering high-quality, fast-turnaround visual content that makes our clients unforgettable."
+                </p>
+                <p style="font-size:0.75rem;color:rgba(201,168,76,0.7);margin-top:1rem;font-family:'Syne',sans-serif;letter-spacing:0.1em;">— John Roman, Founder</p>
+            </div>
+        </div>
+
+        <!-- image bento -->
+        <div class="reveal reveal-delay-2" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:220px 200px;gap:1rem;">
+            <div style="border-radius:20px;overflow:hidden;background:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop') center/cover;position:relative;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(4,2,15,0.7) 100%);"></div>
+                <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Corporate</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;background:url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop') center/cover;position:relative;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(4,2,15,0.7) 100%);"></div>
+                <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Lifestyle</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;background:url('https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=800&auto=format&fit=crop') center/cover;grid-column:span 2;position:relative;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.75) 100%);"></div>
+                <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Maternity & Portraits</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ MISSION + VISION ═══════ -->
+<section style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1557804486-ef2ae124bedc?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.05;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.98) 30%,rgba(30,10,60,0.85) 100%);"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="text-align:center;margin-bottom:4rem;">
+            <p class="section-label" style="margin-bottom:1rem;">What drives us</p>
+            <h2 class="font-display grad-text-ice" style="font-size:clamp(2.5rem,5vw,5rem);font-weight:300;line-height:1.1;">
+                Mission &amp; <em>Vision</em>
+            </h2>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:24px;padding:3rem;overflow:hidden;">
+                <div class="card-line"></div>
+                <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#c9a84c,#e8d08a);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:2rem;">🎯</div>
+                <p class="section-label" style="margin-bottom:0.75rem;">Mission</p>
+                <h3 class="font-display" style="font-size:2rem;font-weight:400;line-height:1.1;margin-bottom:1.5rem;color:var(--gold-light);">
+                    To capture with<br><em>precision & artistry</em>
+                </h3>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.8;font-size:0.9rem;">
+                    We strive to capture moments with precision and artistry — blending technical expertise with creativity to produce images that reflect the unique personality of individuals and the professional identity of businesses.
+                </p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:24px;padding:3rem;overflow:hidden;">
+                <div class="card-line"></div>
+                <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--violet),#9060d0);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:2rem;">👁️</div>
+                <p class="section-label" style="margin-bottom:0.75rem;">Vision</p>
+                <h3 class="font-display" style="font-size:2rem;font-weight:400;line-height:1.1;margin-bottom:1.5rem;color:rgba(168,200,232,0.9);">
+                    Leading the<br><em>Northern Cape & beyond</em>
+                </h3>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.8;font-size:0.9rem;">
+                    To be the leading photography service provider in the Northern Cape and beyond, delivering images that inspire confidence, professionalism, and authenticity in every frame.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ CORE VALUES ═══════ -->
+<section style="padding:8rem 3rem;position:relative;overflow:hidden;">
+    <div class="flare" style="width:700px;height:700px;background:var(--gold);top:-200px;right:-300px;opacity:0.05;"></div>
+
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="text-align:center;margin-bottom:5rem;">
+            <p class="section-label" style="margin-bottom:1rem;">What we stand for</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem);font-weight:300;line-height:1.1;">
+                Core <em>values</em>
+            </h2>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1.2rem;">
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:20px;padding:2rem 1.5rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2rem;margin-bottom:1.2rem;">🎖️</div>
+                <h4 class="font-display" style="font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Professionalism</h4>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Highest standards of conduct and quality in all work.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:20px;padding:2rem 1.5rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2rem;margin-bottom:1.2rem;">✨</div>
+                <h4 class="font-display" style="font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Creativity</h4>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Every session tailored with a unique, artistic approach.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-3" style="border-radius:20px;padding:2rem 1.5rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2rem;margin-bottom:1.2rem;">⏱️</div>
+                <h4 class="font-display" style="font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Reliability</h4>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Consistent, timely delivery clients can always count on.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-4" style="border-radius:20px;padding:2rem 1.5rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2rem;margin-bottom:1.2rem;">🌿</div>
+                <h4 class="font-display" style="font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Authenticity</h4>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Natural, genuine images true to each client's story.</p>
+            </div>
+            <div class="glass-gold hover-card reveal reveal-delay-4" style="border-radius:20px;padding:2rem 1.5rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2rem;margin-bottom:1.2rem;">🤲</div>
+                <h4 class="font-display" style="font-size:1.3rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Client-Centered</h4>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">Deep understanding of every client's unique needs.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ FOUNDER — DEEP PROFILE ═══════ -->
+<section id="team" style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.04;"></div>
+    <div class="flare" style="width:500px;height:500px;background:var(--gold);bottom:-100px;left:-100px;opacity:0.06;"></div>
+
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="text-align:center;margin-bottom:5rem;">
+            <p class="section-label" style="margin-bottom:1rem;">The artist</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem);font-weight:300;line-height:1.1;">
+                Meet the <em>founder</em>
+            </h2>
+        </div>
+
+        <!-- wide founder card -->
+        <div class="glass reveal" style="border-radius:28px;overflow:hidden;display:grid;grid-template-columns:420px 1fr;min-height:480px;margin-bottom:2rem;">
+            <div style="background:url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=900&auto=format&fit=crop') center/cover;position:relative;">
+                <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,rgba(4,2,15,0.7));"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(4,2,15,0.5) 0%,transparent 50%);"></div>
+                <div style="position:absolute;bottom:2rem;left:2rem;">
+                    <span class="tag">Lead Photographer</span>
+                </div>
+            </div>
+            <div style="padding:3.5rem;display:flex;flex-direction:column;justify-content:center;">
+                <p class="section-label" style="margin-bottom:0.75rem;">Founder & CEO</p>
+                <h3 class="font-display grad-text" style="font-size:3rem;font-weight:400;line-height:1.05;margin-bottom:0.5rem;">John</h3>
+                <h3 class="font-display" style="font-size:1.8rem;font-weight:300;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;">Bennedict Janie Roman</h3>
+
+                <p style="color:rgba(255,255,255,0.7);line-height:1.9;font-size:0.95rem;max-width:520px;margin-bottom:2rem;">
+                    Over nine years of professional experience in corporate and lifestyle photography. Approachable, precise, and deeply dedicated to imagery that transcends the moment. Specialties: headshots, lifestyle, maternity.
+                </p>
+
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;">
+                    <span class="tag">C1 Driver</span>
+                    <span class="tag">Grade 12</span>
+                    <span class="tag">SAMTRAC / NOSA</span>
+                    <span class="tag">First Aid L1</span>
+                    <span class="tag">Fire Fighting</span>
+                    <span class="tag">Safety Management</span>
+                </div>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;">
+                    <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.7;">
+                        Also: Semi-skilled boilermaker · Kumba Iron Ore, Sishen · De Beers (Voorspoed) · Xtreme Trading, Kathu · Octa Engineering, Kroonstad
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- crew 3 cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:20px;padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#3b5ec8,#6a3fa8);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">⚡</div>
+                <h4 class="font-display" style="font-size:1.5rem;font-weight:400;margin-bottom:0.5rem;">Assistants</h4>
+                <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Lighting, setup & session flow — the unsung backbone of every perfect frame.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:20px;padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8a4a9a,#c86080);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">🖌️</div>
+                <h4 class="font-display" style="font-size:1.5rem;font-weight:400;margin-bottom:0.5rem;">Editors & Retouchers</h4>
+                <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Precision post-processing with a commitment to natural authenticity.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-3" style="border-radius:20px;padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a6080,#2a90c0);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">📅</div>
+                <h4 class="font-display" style="font-size:1.5rem;font-weight:400;margin-bottom:0.5rem;">Client Support</h4>
+                <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Seamless scheduling, prompt response, and lasting satisfaction guaranteed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ OWNERSHIP & QUALIFICATIONS ═══════ -->
+<section style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.06;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 20%,rgba(20,5,40,0.9) 100%);"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="margin-bottom:4rem;">
+            <p class="section-label" style="margin-bottom:1rem;">Ownership profile</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4.5rem);font-weight:300;line-height:1.1;">
+                Technical &amp; <em>professional</em><br>background
+            </h2>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+
+            <!-- personal details -->
+            <div class="glass reveal reveal-delay-1" style="border-radius:24px;padding:3rem;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--violet));"></div>
+                <p class="section-label" style="margin-bottom:1.5rem;">Personal details</p>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div style="display:flex;justify-content:space-between;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'Syne',sans-serif;">Name</span>
+                        <span style="font-size:0.9rem;">John Bennedict Janie Roman</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'Syne',sans-serif;">Age</span>
+                        <span style="font-size:0.9rem;">35 years old</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'Syne',sans-serif;">Education</span>
+                        <span style="font-size:0.9rem;">Grade 12</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'Syne',sans-serif;">Licence</span>
+                        <span style="font-size:0.9rem;">Code C1</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'Syne',sans-serif;">Location</span>
+                        <span style="font-size:0.9rem;">43 Lattakoo Estate, Kathu 8446</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:2.5rem;">
+                    <p class="section-label" style="margin-bottom:1.2rem;">Safety & risk training</p>
+                    <div style="position:relative;padding-left:2.5rem;">
+                        <div class="timeline-line"></div>
+                        <div style="display:flex;flex-direction:column;gap:1rem;">
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Safety Risk Management Process — Lesedi</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">A2 Safety Risk — De Beers</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Introduction to SAMTRAC / SAMTRAC Flagship</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Facilitate HSE Management Systems — NOSA</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Occupational Health & Safety (Mining & Minerals)</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.5);"></div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Elementary Fire Fighting · First Aid Level 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:2rem;">
+                <!-- mining qualifications -->
+                <div class="glass reveal reveal-delay-2" style="border-radius:24px;padding:2.5rem;position:relative;overflow:hidden;flex:1;">
+                    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--gold));"></div>
+                    <p class="section-label" style="margin-bottom:1.5rem;">Mining & technical qualifications</p>
+                    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);font-size:0.8rem;">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Ore Reception, Diamond Recovery, Crushing</p></div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);font-size:0.8rem;">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Scrubbing & Screening, Thickening of Slurry</p></div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);font-size:0.8rem;">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Dense Medium Separation — MQA</p></div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);font-size:0.8rem;">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Diploma in Administration Clerk</p></div>
+                        <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);font-size:0.8rem;">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.75);">Power Tools & Basic Hand Tools (IEB)</p></div>
+                    </div>
+                </div>
+
+                <!-- career timeline -->
+                <div class="glass-gold reveal reveal-delay-3" style="border-radius:24px;padding:2.5rem;flex:1;">
+                    <p class="section-label" style="margin-bottom:1.5rem;">Career experience</p>
+                    <div style="position:relative;padding-left:2.5rem;">
+                        <div class="timeline-line"></div>
+                        <div style="display:flex;flex-direction:column;gap:1.2rem;">
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.6);"></div>
+                                <p style="font-size:0.85rem;font-family:'Syne',sans-serif;color:var(--gold-light);margin-bottom:0.2rem;">Kumba Iron Ore, Sishen</p>
+                                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Semi-Skilled Boilermaker</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.6);"></div>
+                                <p style="font-size:0.85rem;font-family:'Syne',sans-serif;color:var(--gold-light);margin-bottom:0.2rem;">Xtreme Trading, Kathu</p>
+                                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Semi-Skilled Boilermaker</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.6);"></div>
+                                <p style="font-size:0.85rem;font-family:'Syne',sans-serif;color:var(--gold-light);margin-bottom:0.2rem;">De Beers Mine, Voorspoed</p>
+                                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Plant Monitor</p>
+                            </div>
+                            <div style="position:relative;">
+                                <div style="position:absolute;left:-1.9rem;top:0.3rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,0.6);"></div>
+                                <p style="font-size:0.85rem;font-family:'Syne',sans-serif;color:var(--gold-light);margin-bottom:0.2rem;">Octa Engineering, Kroonstad</p>
+                                <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);">Boilermaker</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ WHY CHOOSE US ═══════ -->
+<section style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1554048612-b77c3c56d6c7?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.05;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 30%,rgba(40,15,70,0.7) 100%);"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
+        <div class="reveal">
+            <p class="section-label" style="margin-bottom:1rem;">Our difference</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4.5rem);font-weight:300;line-height:1.1;margin-bottom:3rem;">
+                Why choose<br><em>Jay Roman Media</em>
+            </h2>
+            <div style="display:flex;flex-direction:column;gap:2rem;">
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">⭐</div>
+                    <div>
+                        <h4 style="font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:600;color:var(--gold-light);margin-bottom:0.35rem;">Established 2016</h4>
+                        <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.7;">Proven 9-year track record in corporate & lifestyle photography across Southern Africa.</p>
+                    </div>
+                </div>
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">✨</div>
+                    <div>
+                        <h4 style="font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:600;color:var(--gold-light);margin-bottom:0.35rem;">Modern Style</h4>
+                        <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.7;">Natural light, professional styling — elegant, timeless results every time.</p>
+                    </div>
+                </div>
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">🌍</div>
+                    <div>
+                        <h4 style="font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:600;color:var(--gold-light);margin-bottom:0.35rem;">Client Diversity</h4>
+                        <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.7;">Business, families, individuals — every story deserves the same level of care.</p>
+                    </div>
+                </div>
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">🔍</div>
+                    <div>
+                        <h4 style="font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:600;color:var(--gold-light);margin-bottom:0.35rem;">Attention to Detail</h4>
+                        <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.7;">Every photograph carefully crafted — we hold each frame to the highest standard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- quote card -->
+        <div class="glass-gold reveal reveal-delay-2" style="border-radius:28px;padding:3.5rem;position:relative;overflow:hidden;">
+            <div class="shimmer" style="position:absolute;inset:0;border-radius:28px;pointer-events:none;"></div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:1;color:var(--gold);opacity:0.4;margin-bottom:1rem;">"</div>
+            <p class="font-display" style="font-size:1.8rem;font-weight:300;font-style:italic;color:rgba(255,255,255,0.9);line-height:1.5;margin-bottom:2rem;">
+                We don't just capture images — we create media solutions that empower individuals, brands, and communities.
+            </p>
+            <div style="display:flex;align-items:center;gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(201,168,76,0.15);">
+                <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--violet));display:flex;align-items:center;justify-content:center;font-size:1rem;">J</div>
+                <div>
+                    <p style="font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:600;">John Roman</p>
+                    <p style="font-size:0.72rem;color:rgba(255,255,255,0.4);">Founder, Jay Roman Media</p>
+                </div>
+            </div>
+            <div style="margin-top:2rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <span class="tag" style="font-size:0.58rem;">◈ corporate</span>
+                <span class="tag" style="font-size:0.58rem;">◈ lifestyle</span>
+                <span class="tag" style="font-size:0.58rem;">◈ maternity</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ CONTACT CTA ═══════ -->
+<section style="padding:2rem 3rem 8rem;">
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="glass reveal" style="border-radius:28px;overflow:hidden;position:relative;">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.08;"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.9),rgba(30,10,60,0.8));"></div>
+            <div class="flare" style="width:400px;height:400px;background:var(--gold);top:-100px;right:-100px;opacity:0.08;"></div>
+
+            <div style="position:relative;padding:4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:3rem;">
+                <div>
+                    <p class="section-label" style="margin-bottom:1rem;">Get in touch</p>
+                    <h3 class="font-display grad-text" style="font-size:3rem;font-weight:300;line-height:1.1;margin-bottom:0.5rem;">Ready to create<br><em>something great?</em></h3>
+                    <p style="font-size:0.9rem;color:rgba(255,255,255,0.5);margin-top:1rem;">Based in Kathu, Northern Cape — serving beyond.</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;min-width:280px;">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">📞</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.9rem;color:var(--gold-light);">066 383 8944</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">📧</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--gold-light);">goodmenpictures@gmail.com</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">📱</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--gold-light);">@jaybroman · Jay Roman Media</span>
+                    </div>
+                    <a href="contact.html" class="btn-gold" style="text-align:center;margin-top:0.5rem;">Start a conversation →</a>
+                </div>
+            </div>
+            <div style="position:relative;padding:1.5rem 4rem;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.25);">References: ASSMANG · AngloAmerican (Cecilia Zietsman, Communication & Engagement, Rosebank) · Kumba Iron Ore</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer style="border-top:1px solid rgba(255,255,255,0.06);padding:3rem;background:rgba(4,2,15,0.8);">
+    <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
+        <div>
+            <span class="font-display" style="font-size:1.4rem;color:var(--gold-light);">Jay Roman Media</span>
+            <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.25rem;letter-spacing:0.2em;text-transform:uppercase;">Visual content creation with purpose</p>
+        </div>
+        <div style="display:flex;gap:2rem;">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="about.html" class="nav-link active">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,0.2);">© 2025 Jay Roman Media — all rights reserved</p>
+    </div>
+</footer>
+
+<!-- floating pill -->
+<div class="glass" style="position:fixed;bottom:2rem;left:2rem;border-radius:999px;padding:0.6rem 1.4rem;z-index:90;border:1px solid rgba(201,168,76,0.2);">
+    <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.7);">✦ authenticity · creativity · reliability</span>
+</div>
+
+<script>
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        setTimeout(() => {
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        }, 60);
+    });
+    document.querySelectorAll('a,button,.hover-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1.8)';
+            ring.style.borderColor = 'rgba(201,168,76,0.8)';
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1)';
+            ring.style.borderColor = 'rgba(201,168,76,0.5)';
+        });
+    });
+
+    window.addEventListener('scroll', () => {
+        document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

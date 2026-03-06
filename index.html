@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Roman Media · beyond the lens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #04020f;
+            --cream: #f5f0e8;
+            --gold: #c9a84c;
+            --gold-light: #e8d08a;
+            --ice: #a8c8e8;
+            --violet: #6a3fa8;
+            --rose: #c86080;
+            --deep: #080520;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── CUSTOM CURSOR ── */
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s;
+        }
+        .cursor-ring {
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(201,168,76,0.5);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease;
+        }
+
+        /* ── TYPOGRAPHY ── */
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+        .font-sans-alt { font-family: 'Syne', sans-serif; }
+
+        /* ── GLASS ── */
+        .glass {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .glass-gold {
+            background: rgba(201,168,76,0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(201,168,76,0.25);
+        }
+        .glass-dark {
+            background: rgba(4,2,15,0.55);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* ── GRADIENTS ── */
+        .grad-text {
+            background: linear-gradient(135deg, #f5f0e8 0%, var(--gold-light) 40%, var(--gold) 70%, #e8a060 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .grad-text-ice {
+            background: linear-gradient(135deg, #fff 0%, var(--ice) 60%, #8090d0 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            transition: all 0.4s ease;
+        }
+        nav.scrolled .nav-inner {
+            background: rgba(4,2,15,0.85);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.4rem 3rem;
+            transition: all 0.4s;
+        }
+        .nav-link {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none; position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: var(--gold-light); }
+        .nav-link:hover::after { width: 100%; }
+
+        /* ── SECTION DIVIDER ── */
+        .divider {
+            width: 60px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative; height: 100vh; min-height: 700px;
+            display: flex; align-items: center; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            transform: scale(1.08);
+            transition: transform 8s ease;
+            will-change: transform;
+        }
+        .hero:hover .hero-bg { transform: scale(1.04); }
+
+        .hero-overlay-main {
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                115deg,
+                rgba(4,2,15,0.88) 0%,
+                rgba(20,10,40,0.65) 45%,
+                rgba(4,2,15,0.4) 100%
+            );
+        }
+        .hero-gradient-bottom {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 280px;
+            background: linear-gradient(to top, var(--deep), transparent);
+        }
+
+        /* ── CARD HOVER ── */
+        .service-card {
+            position: relative; overflow: hidden;
+            transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s ease;
+        }
+        .service-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(106,63,168,0.06));
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 40px 60px -20px rgba(0,0,0,0.6); }
+        .service-card:hover::before { opacity: 1; }
+        .service-card .card-line {
+            position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--violet));
+            transition: width 0.5s ease;
+        }
+        .service-card:hover .card-line { width: 100%; }
+
+        /* ── SCROLL REVEALS ── */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.25,.8,.25,1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ── FLOATING BADGE ── */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float { animation: float 4s ease-in-out infinite; }
+
+        /* ── MARQUEE ── */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: flex; gap: 0; white-space: nowrap;
+            animation: marquee 22s linear infinite;
+        }
+
+        /* ── GRAIN OVERLAY ── */
+        .grain::after {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; opacity: 0.3; border-radius: inherit;
+        }
+
+        /* ── LENS FLARE ── */
+        .flare {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            filter: blur(80px); opacity: 0.12;
+        }
+
+        /* ── PARALLAX SECTIONS ── */
+        .parallax-img {
+            position: absolute; inset: -20%;
+            background-size: cover; background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* ── PILL TAG ── */
+        .tag {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 0.4rem 1rem; border-radius: 999px;
+            border: 1px solid rgba(201,168,76,0.35);
+            color: var(--gold-light);
+            background: rgba(201,168,76,0.06);
+        }
+
+        /* ── CONTACT FORM ── */
+        .input-field {
+            width: 100%; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 0.85rem 1.2rem;
+            color: #fff; font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; outline: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .input-field:focus {
+            border-color: rgba(201,168,76,0.5);
+            background: rgba(201,168,76,0.04);
+        }
+        .input-field::placeholder { color: rgba(255,255,255,0.3); }
+
+        /* ── CTA BTN ── */
+        .btn-gold {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #c9a84c, #e8d08a, #c9a84c);
+            background-size: 200% 100%; background-position: 100%;
+            color: var(--ink); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px;
+            border: none; cursor: none;
+            transition: background-position 0.4s ease, transform 0.2s, box-shadow 0.3s;
+            font-weight: 700;
+        }
+        .btn-gold:hover {
+            background-position: 0%;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -8px rgba(201,168,76,0.5);
+        }
+        .btn-outline {
+            background: transparent;
+            color: rgba(255,255,255,0.85); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.2); cursor: none;
+            transition: border-color 0.3s, color 0.3s, background 0.3s;
+            font-weight: 600;
+        }
+        .btn-outline:hover {
+            border-color: rgba(201,168,76,0.5);
+            color: var(--gold-light);
+            background: rgba(201,168,76,0.06);
+        }
+
+        /* ── LARGE COUNTER NUMBERS ── */
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 20%, var(--gold-light) 80%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        /* portrait shimmer */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* section label */
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* mobile nav */
+        @media (max-width: 768px) {
+            .nav-inner { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── CUSTOM CURSOR ── -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<nav id="mainNav">
+    <div class="nav-inner">
+        <a href="#" style="text-decoration:none">
+            <div>
+                <span class="font-display" style="font-size:1.6rem; font-weight:600; background: linear-gradient(135deg,#fff,var(--gold-light)); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:0.02em;">Jay Roman</span>
+                <span class="font-sans-alt" style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:rgba(201,168,76,0.7); display:block; margin-top:-2px; padding-left:2px;">Media · beyond the lens</span>
+            </div>
+        </a>
+        <div class="nav-links" style="display:flex; gap:2.5rem;">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <a href="#contact" class="btn-gold" style="font-size:0.65rem; padding:0.6rem 1.4rem;">Book Session</a>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO — MAIN
+═══════════════════════════════════════════ -->
+<section id="home" class="hero grain">
+    <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=90&w=2100&auto=format&fit=crop');"></div>
+    <div class="hero-overlay-main"></div>
+    <div class="hero-gradient-bottom"></div>
+
+    <!-- flares -->
+    <div class="flare" style="width:500px;height:500px;background:var(--gold);top:-100px;right:10%;"></div>
+    <div class="flare" style="width:300px;height:300px;background:var(--violet);bottom:10%;left:5%;"></div>
+
+    <div style="position:relative; width:100%; max-width:1400px; margin:0 auto; padding:0 3rem; display:grid; grid-template-columns:1fr 400px; gap:4rem; align-items:center;">
+        <div style="padding-top:5rem;">
+            <div class="tag float" style="margin-bottom:2rem;">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+                Visual Storytellers · Est. 2016
+            </div>
+            <h1 class="font-display grad-text" style="font-size:clamp(3.5rem,8vw,7.5rem); line-height:0.95; font-weight:300; letter-spacing:-0.01em; margin-bottom:2rem;">
+                Moments<br>
+                <em style="font-style:italic; font-weight:300;">that move</em><br>
+                <span style="font-weight:600;">& endure.</span>
+            </h1>
+            <p style="max-width:480px; color:rgba(255,255,255,0.65); line-height:1.8; font-size:1rem; margin-bottom:2.5rem;">
+                Corporate headshots, brand campaigns, lifestyle & maternity — we craft visual narratives that elevate individuals, teams, and organisations across Southern Africa.
+            </p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+                <a href="#contact" class="btn-gold">Book a session</a>
+                <a href="#services" class="btn-outline">Explore services</a>
+            </div>
+            <div style="margin-top:3.5rem; display:flex; gap:3rem;">
+                <div>
+                    <div class="stat-num">9+</div>
+                    <div style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:0.2rem;">Years active</div>
+                </div>
+                <div style="width:1px; background:rgba(255,255,255,0.08);"></div>
+                <div>
+                    <div class="stat-num">3</div>
+                    <div style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:0.2rem;">Industry giants</div>
+                </div>
+                <div style="width:1px; background:rgba(255,255,255,0.08);"></div>
+                <div>
+                    <div class="stat-num">∞</div>
+                    <div style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:0.2rem;">Stories told</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- right glass card -->
+        <div class="glass-dark" style="border-radius:24px; padding:2.2rem; position:relative; overflow:hidden; margin-top:5rem;">
+            <div class="shimmer" style="position:absolute; inset:0; border-radius:24px;"></div>
+            <p class="section-label" style="margin-bottom:1rem;">Founder's vision</p>
+            <p class="font-display" style="font-size:1.5rem; font-weight:300; font-style:italic; line-height:1.5; color:rgba(255,255,255,0.9); margin-bottom:1.5rem;">
+                "We don't just capture — we create media solutions that resonate long after the shutter clicks."
+            </p>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--gold),var(--violet)); display:flex; align-items:center; justify-content:center; font-size:1.1rem;">J</div>
+                <div>
+                    <div style="font-family:'Syne',sans-serif; font-size:0.8rem; font-weight:600;">John Roman</div>
+                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.4);">Founder & Lead Photographer</div>
+                </div>
+            </div>
+            <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.06);">
+                <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                    <span class="tag" style="font-size:0.6rem;">Corporate</span>
+                    <span class="tag" style="font-size:0.6rem;">Lifestyle</span>
+                    <span class="tag" style="font-size:0.6rem;">Maternity</span>
+                    <span class="tag" style="font-size:0.6rem;">Brand</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MARQUEE STRIP
+═══════════════════════════════════════════ -->
+<div style="overflow:hidden; border-top:1px solid rgba(201,168,76,0.12); border-bottom:1px solid rgba(201,168,76,0.12); padding:1rem 0; background:rgba(201,168,76,0.03);">
+    <div class="marquee-track">
+        <span style="font-family:'Syne',sans-serif; font-size:0.65rem; letter-spacing:0.3em; color:rgba(201,168,76,0.6); text-transform:uppercase; padding:0 3rem;">◈ Corporate Headshots ◈ Brand Campaigns ◈ Lifestyle Portraits ◈ Maternity Sessions ◈ Team Photography ◈ Moving Image ◈ On-site Documentation ◈ Visual Storytelling ◈ Northern Cape & Beyond ◈ ASSMANG ◈ AngloAmerican ◈ Kumba Iron Ore ◈</span>
+        <span style="font-family:'Syne',sans-serif; font-size:0.65rem; letter-spacing:0.3em; color:rgba(201,168,76,0.6); text-transform:uppercase; padding:0 3rem;">◈ Corporate Headshots ◈ Brand Campaigns ◈ Lifestyle Portraits ◈ Maternity Sessions ◈ Team Photography ◈ Moving Image ◈ On-site Documentation ◈ Visual Storytelling ◈ Northern Cape & Beyond ◈ ASSMANG ◈ AngloAmerican ◈ Kumba Iron Ore ◈</span>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════════ -->
+<section id="services" style="padding:8rem 3rem; position:relative; overflow:hidden;">
+    <div class="flare" style="width:600px;height:600px;background:var(--violet);top:-200px;right:-200px; opacity:0.07;"></div>
+
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="margin-bottom:4rem;">
+            <p class="section-label" style="margin-bottom:1rem;">What we create</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem); font-weight:300; line-height:1.1; max-width:600px;">
+                Visual services<br>for every <em>story</em>
+            </h2>
+        </div>
+
+        <!-- 2-col grid top + 3-col bottom -->
+        <div style="display:grid; grid-template-columns:repeat(12,1fr); gap:1.5rem;">
+
+            <!-- CORPORATE — wide -->
+            <div class="glass service-card reveal reveal-delay-1" style="grid-column:span 5; border-radius:20px; padding:2.5rem; min-height:340px; position:relative; overflow:hidden;">
+                <div class="card-line"></div>
+                <div style="position:absolute; top:0; right:0; bottom:0; width:55%; border-radius:0 20px 20px 0; background:url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop') center/cover; opacity:0.25;"></div>
+                <div style="position:relative;">
+                    <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#3b5ec8,#6a3fa8);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.5rem;">🏢</div>
+                    <p class="section-label" style="margin-bottom:0.5rem;">01</p>
+                    <h3 class="font-display" style="font-size:2rem; font-weight:400; margin-bottom:1rem; line-height:1.1;">Corporate<br><em>Headshots</em></h3>
+                    <ul style="list-style:none; display:flex; flex-direction:column; gap:0.6rem;">
+                        <li style="font-size:0.85rem; color:rgba(255,255,255,0.65); display:flex;align-items:center;gap:0.5rem;"><span style="color:var(--gold);">—</span> Studio-quality individual headshots</li>
+                        <li style="font-size:0.85rem; color:rgba(255,255,255,0.65); display:flex;align-items:center;gap:0.5rem;"><span style="color:var(--gold);">—</span> Team & group portraits</li>
+                        <li style="font-size:0.85rem; color:rgba(255,255,255,0.65); display:flex;align-items:center;gap:0.5rem;"><span style="color:var(--gold);">—</span> On-site business documentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- LIFESTYLE -->
+            <div class="glass service-card reveal reveal-delay-2" style="grid-column:span 4; border-radius:20px; overflow:hidden; min-height:340px; position:relative;">
+                <div class="card-line"></div>
+                <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop') center/cover; opacity:0.3;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,2,15,0.3) 0%,rgba(4,2,15,0.9) 100%);"></div>
+                <div style="position:absolute; bottom:0; left:0; right:0; padding:2rem;">
+                    <p class="section-label" style="margin-bottom:0.5rem;">02</p>
+                    <h3 class="font-display" style="font-size:2rem; font-weight:400; line-height:1.1; margin-bottom:0.75rem;">Lifestyle <em>& Portraits</em></h3>
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.65);">Individual, couple, family & employee sessions that capture authentic moments.</p>
+                </div>
+            </div>
+
+            <!-- MATERNITY -->
+            <div class="glass service-card reveal reveal-delay-3" style="grid-column:span 3; border-radius:20px; overflow:hidden; min-height:340px; position:relative;">
+                <div class="card-line"></div>
+                <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=800&auto=format&fit=crop') center/cover; opacity:0.35;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,2,15,0.2) 0%,rgba(4,2,15,0.92) 100%);"></div>
+                <div style="position:absolute; bottom:0; padding:2rem;">
+                    <p class="section-label" style="margin-bottom:0.5rem;">03</p>
+                    <h3 class="font-display" style="font-size:1.8rem; font-weight:400; line-height:1.1; margin-bottom:0.75rem;">Maternity</h3>
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.65);">Timeless, intimate sessions celebrating new life.</p>
+                </div>
+            </div>
+
+            <!-- BRAND CAMPAIGNS -->
+            <div class="glass service-card reveal reveal-delay-1" style="grid-column:span 4; border-radius:20px; overflow:hidden; min-height:280px; position:relative;">
+                <div class="card-line"></div>
+                <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1551817958-c5b51e7b4a33?q=80&w=800&auto=format&fit=crop') center/cover; opacity:0.3;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,2,15,0.3) 0%,rgba(4,2,15,0.88) 100%);"></div>
+                <div style="position:absolute; bottom:0; padding:2rem;">
+                    <p class="section-label" style="margin-bottom:0.5rem;">04</p>
+                    <h3 class="font-display" style="font-size:1.8rem; font-weight:400; line-height:1.1; margin-bottom:0.75rem;">Brand <em>Campaigns</em></h3>
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.65);">Marketing imagery, workspaces in action & creative campaigns.</p>
+                </div>
+            </div>
+
+            <!-- MOVING IMAGE -->
+            <div class="glass service-card reveal reveal-delay-2" style="grid-column:span 4; border-radius:20px; overflow:hidden; min-height:280px; position:relative;">
+                <div class="card-line"></div>
+                <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800&auto=format&fit=crop') center/cover; opacity:0.3;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,2,15,0.3) 0%,rgba(4,2,15,0.88) 100%);"></div>
+                <div style="position:absolute; bottom:0; padding:2rem;">
+                    <p class="section-label" style="margin-bottom:0.5rem;">05</p>
+                    <h3 class="font-display" style="font-size:1.8rem; font-weight:400; line-height:1.1; margin-bottom:0.75rem;">Moving <em>Image</em></h3>
+                    <p style="font-size:0.85rem; color:rgba(255,255,255,0.65);">Video production & visual content for social media & events.</p>
+                </div>
+            </div>
+
+            <!-- ORGANISATIONS -->
+            <div class="glass-gold service-card reveal reveal-delay-3" style="grid-column:span 4; border-radius:20px; padding:2.5rem; min-height:280px;">
+                <div class="card-line"></div>
+                <div style="margin-bottom:1.5rem;">
+                    <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#e8a060);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🏛️</div>
+                </div>
+                <p class="section-label" style="margin-bottom:0.5rem;">06</p>
+                <h3 class="font-display" style="font-size:1.8rem; font-weight:400; line-height:1.1; margin-bottom:0.75rem; color:var(--gold-light);">Organisations <em>& Mining</em></h3>
+                <p style="font-size:0.85rem; color:rgba(255,255,255,0.65);">Specialist on-site documentation for industrial & mining sectors.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MISSION QUOTE STRIP
+═══════════════════════════════════════════ -->
+<div style="position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1520390138845-fd2d229dd553?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.12;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.95),rgba(30,10,60,0.9));"></div>
+    <div style="position:relative; max-width:900px; margin:0 auto; padding:6rem 3rem; text-align:center;">
+        <div class="divider" style="margin:0 auto 2.5rem;"></div>
+        <p class="font-display grad-text" style="font-size:clamp(1.8rem,4vw,3.5rem); font-weight:300; line-height:1.4; font-style:italic; margin-bottom:2rem;">
+            "We aim to uplift communities by creating jobs while delivering high-quality, fast-turnaround visual content that makes every client unforgettable."
+        </p>
+        <div class="divider" style="margin:0 auto;"></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURED WORK / HERO 2
+═══════════════════════════════════════════ -->
+<section id="work" style="padding:8rem 3rem; position:relative; overflow:hidden;">
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end; margin-bottom:4rem; flex-wrap:wrap; gap:2rem;">
+            <div>
+                <p class="section-label" style="margin-bottom:1rem;">Portfolio snapshots</p>
+                <h2 class="font-display grad-text-ice" style="font-size:clamp(2.5rem,5vw,5rem); font-weight:300; line-height:1.1;">
+                    The work<br><em>speaks</em> for itself
+                </h2>
+            </div>
+            <a href="#contact" class="btn-outline">Commission a project</a>
+        </div>
+
+        <!-- bento-style grid of images -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:300px 220px; gap:1rem;">
+            <div style="grid-row:span 2; border-radius:20px; overflow:hidden; position:relative; background:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop') center/cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(4,2,15,0.8) 100%);"></div>
+                <div style="position:absolute;bottom:1.5rem;left:1.5rem;"><span class="tag">Corporate Headshots</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;position:relative;background:url('https://images.unsplash.com/photo-1474176857210-7287d38d27c6?q=80&w=800&auto=format&fit=crop') center/cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                <div style="position:absolute;bottom:1.2rem;left:1.2rem;"><span class="tag">Lifestyle</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;position:relative;background:url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=800&auto=format&fit=crop') center/cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                <div style="position:absolute;bottom:1.2rem;left:1.2rem;"><span class="tag">Portraits</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;position:relative;background:url('https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=800&auto=format&fit=crop') center/cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                <div style="position:absolute;bottom:1.2rem;left:1.2rem;"><span class="tag">Brand</span></div>
+            </div>
+            <div style="border-radius:20px;overflow:hidden;position:relative;background:url('https://images.unsplash.com/photo-1611601322175-ef8ec8c5c49d?q=80&w=800&auto=format&fit=crop') center/cover;">
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                <div style="position:absolute;bottom:1.2rem;left:1.2rem;"><span class="tag">Maternity</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CLIENTS
+═══════════════════════════════════════════ -->
+<section style="padding:5rem 3rem; position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1800&auto=format&fit=crop') center/cover; opacity:0.06;"></div>
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+        <p class="section-label reveal" style="margin-bottom:1.5rem;">Trusted by industry leaders</p>
+        <div class="glass reveal" style="border-radius:24px; padding:3rem 4rem; display:flex; justify-content:center; align-items:center; gap:0; flex-wrap:wrap;">
+            <div style="flex:1; min-width:180px; padding:1.5rem; text-align:center; border-right:1px solid rgba(255,255,255,0.08);">
+                <p class="font-display" style="font-size:1.8rem; font-weight:600; color:var(--gold-light);">ASSMANG</p>
+                <p style="font-size:0.7rem; color:rgba(255,255,255,0.4); margin-top:0.25rem; letter-spacing:0.15em; text-transform:uppercase;">Mining Group</p>
+            </div>
+            <div style="flex:1; min-width:180px; padding:1.5rem; text-align:center; border-right:1px solid rgba(255,255,255,0.08);">
+                <p class="font-display" style="font-size:1.8rem; font-weight:600; color:var(--gold-light);">AngloAmerican</p>
+                <p style="font-size:0.7rem; color:rgba(255,255,255,0.4); margin-top:0.25rem; letter-spacing:0.15em; text-transform:uppercase;">Global Resources</p>
+            </div>
+            <div style="flex:1; min-width:180px; padding:1.5rem; text-align:center;">
+                <p class="font-display" style="font-size:1.8rem; font-weight:600; color:var(--gold-light);">Kumba Iron Ore</p>
+                <p style="font-size:0.7rem; color:rgba(255,255,255,0.4); margin-top:0.25rem; letter-spacing:0.15em; text-transform:uppercase;">Iron Ore Producer</p>
+            </div>
+        </div>
+        <p class="reveal" style="margin-top:2rem; font-size:0.85rem; color:rgba(255,255,255,0.4); font-style:italic;">"Exceptional work" — Cecilia Zietsman, Communication & Engagement, Anglo American · Rosebank</p>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TEAM
+═══════════════════════════════════════════ -->
+<section id="team" style="padding:8rem 3rem; position:relative; overflow:hidden;">
+    <div class="flare" style="width:500px;height:500px;background:var(--gold);bottom:-100px;left:-100px; opacity:0.05;"></div>
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1800&auto=format&fit=crop') center/cover; opacity:0.04;"></div>
+
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="margin-bottom:5rem;">
+            <p class="section-label" style="margin-bottom:1rem;">The artists</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem); font-weight:300; line-height:1.1;">
+                Behind the<br><em>lens</em>
+            </h2>
+        </div>
+
+        <!-- founder wide card -->
+        <div class="glass reveal" style="border-radius:24px; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; min-height:400px; margin-bottom:1.5rem;">
+            <div style="background:url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=900&auto=format&fit=crop') center/cover; position:relative;">
+                <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(4,2,15,0.6));"></div>
+                <div style="position:absolute;bottom:2rem;left:2rem;">
+                    <span class="tag">Founder & Lead</span>
+                </div>
+            </div>
+            <div style="padding:3rem;">
+                <p class="section-label" style="margin-bottom:1rem;">John Bennedict Janie Roman</p>
+                <h3 class="font-display grad-text" style="font-size:2.8rem; font-weight:400; line-height:1.1; margin-bottom:1.5rem;">John<br><em>Roman</em></h3>
+                <p style="color:rgba(255,255,255,0.7); line-height:1.8; font-size:0.95rem; margin-bottom:2rem;">Over nine years crafting corporate & lifestyle photography. Approachable, precise, and dedicated to imagery that transcends the moment. Specialties: headshots, lifestyle, maternity.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+                    <span class="tag">C1 Driver</span>
+                    <span class="tag">SAMTRAC / NOSA</span>
+                    <span class="tag">First Aid L1</span>
+                    <span class="tag">Safety Management</span>
+                </div>
+                <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.06);">
+                    <p style="font-size:0.8rem; color:rgba(255,255,255,0.4);">Also: Semi-skilled boilermaker · Kumba Iron Ore · De Beers · Xtreme Trading</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- crew 3 cards -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;">
+            <div class="glass service-card reveal reveal-delay-1" style="border-radius:20px; padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#3b5ec8,#6a3fa8);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">⚡</div>
+                <h4 class="font-display" style="font-size:1.5rem; font-weight:400; margin-bottom:0.5rem;">Assistants</h4>
+                <p style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Lighting, setup & session flow — the unsung backbone of every perfect frame.</p>
+            </div>
+            <div class="glass service-card reveal reveal-delay-2" style="border-radius:20px; padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8a4a9a,#c86080);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">🖌️</div>
+                <h4 class="font-display" style="font-size:1.5rem; font-weight:400; margin-bottom:0.5rem;">Editors & Retouchers</h4>
+                <p style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Precision post-processing with a commitment to natural authenticity.</p>
+            </div>
+            <div class="glass service-card reveal reveal-delay-3" style="border-radius:20px; padding:2rem;">
+                <div class="card-line"></div>
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a6080,#2a90c0);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1.5rem;">📅</div>
+                <h4 class="font-display" style="font-size:1.5rem; font-weight:400; margin-bottom:0.5rem;">Client Support</h4>
+                <p style="font-size:0.85rem; color:rgba(255,255,255,0.6);">Seamless scheduling, prompt response, and lasting satisfaction guaranteed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     WHY US — FULL-BLEED HERO
+═══════════════════════════════════════════ -->
+<section style="position:relative; overflow:hidden; padding:8rem 3rem;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1554048612-b77c3c56d6c7?q=80&w=1800&auto=format&fit=crop') center/cover; opacity:0.12;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 30%,rgba(40,15,70,0.7) 100%);"></div>
+
+    <div style="position:relative; max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="text-align:center; margin-bottom:5rem;">
+            <p class="section-label" style="margin-bottom:1rem;">Our difference</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem); font-weight:300; line-height:1.1;">
+                Why choose <em>Jay Roman Media</em>
+            </h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem;">
+            <div class="glass service-card reveal reveal-delay-1" style="border-radius:20px; padding:2rem; text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem; margin-bottom:1rem;">⭐</div>
+                <h4 class="font-display" style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--gold-light);">Est. 2016</h4>
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Proven 9-year track record of excellence across Southern Africa.</p>
+            </div>
+            <div class="glass service-card reveal reveal-delay-2" style="border-radius:20px; padding:2rem; text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem; margin-bottom:1rem;">✨</div>
+                <h4 class="font-display" style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--gold-light);">Modern Style</h4>
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Natural elegance meets contemporary visual language.</p>
+            </div>
+            <div class="glass service-card reveal reveal-delay-3" style="border-radius:20px; padding:2rem; text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem; margin-bottom:1rem;">🌍</div>
+                <h4 class="font-display" style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--gold-light);">Client Diversity</h4>
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.55);">Business, family, individual — every story deserves the same care.</p>
+            </div>
+            <div class="glass service-card reveal reveal-delay-4" style="border-radius:20px; padding:2rem; text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem; margin-bottom:1rem;">🔍</div>
+                <h4 class="font-display" style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--gold-light);">Detail-obsessed</h4>
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.55);">We hold every frame to the highest standard — no exceptions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════ -->
+<section id="contact" style="padding:8rem 3rem; position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1800&auto=format&fit=crop') center/cover; opacity:0.08;"></div>
+    <div class="flare" style="width:700px;height:700px;background:var(--gold);top:-200px;right:-300px; opacity:0.05;"></div>
+
+    <div style="position:relative; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
+        <div class="reveal">
+            <p class="section-label" style="margin-bottom:1rem;">Let's create together</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem); font-weight:300; line-height:1.05; margin-bottom:2rem;">
+                Your story<br>deserves<br><em>the perfect frame</em>
+            </h2>
+            <p style="color:rgba(255,255,255,0.6); line-height:1.8; font-size:0.95rem; margin-bottom:3rem; max-width:420px;">Ready to elevate your brand, celebrate a milestone, or document your team? We respond within 24 hours.</p>
+
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <div style="width:40px;height:40px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📞</div>
+                    <div>
+                        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Phone</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:0.95rem;color:var(--gold-light);">066 383 8944</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <div style="width:40px;height:40px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📧</div>
+                    <div>
+                        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Email</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:0.95rem;color:var(--gold-light);">goodmenpictures@gmail.com</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <div style="width:40px;height:40px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📱</div>
+                    <div>
+                        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Social</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:0.95rem;color:var(--gold-light);">@jaybroman · Jay Roman Media</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <div style="width:40px;height:40px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📍</div>
+                    <div>
+                        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Location</div>
+                        <div style="font-family:'Syne',sans-serif;font-size:0.9rem;color:rgba(255,255,255,0.7);">43 Lattakoo Estate, Kathu, 8446</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact form glass card -->
+        <div class="glass reveal reveal-delay-2" style="border-radius:24px; padding:3rem; position:relative; overflow:hidden;">
+            <div class="shimmer" style="position:absolute;inset:0;border-radius:24px;pointer-events:none;"></div>
+            <h3 class="font-display" style="font-size:2rem; font-weight:400; margin-bottom:0.5rem; color:var(--gold-light);">Start a conversation</h3>
+            <p style="font-size:0.85rem; color:rgba(255,255,255,0.45); margin-bottom:2rem;">Tell us about your project and we'll be in touch within 24 hours.</p>
+
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <input type="text" class="input-field" placeholder="Your name">
+                <input type="email" class="input-field" placeholder="Email address">
+                <select class="input-field" style="appearance:none;">
+                    <option value="" style="background:#080520;">Service of interest</option>
+                    <option style="background:#080520;">Corporate Headshots</option>
+                    <option style="background:#080520;">Lifestyle & Portraits</option>
+                    <option style="background:#080520;">Maternity Session</option>
+                    <option style="background:#080520;">Brand Campaign</option>
+                    <option style="background:#080520;">Moving Image / Video</option>
+                    <option style="background:#080520;">Organisation / Mining</option>
+                </select>
+                <textarea class="input-field" rows="4" placeholder="Tell us about your vision..." style="resize:none;"></textarea>
+                <button class="btn-gold" style="width:100%; padding:1rem; font-size:0.75rem; border-radius:12px;">Send Message →</button>
+            </div>
+
+            <div style="margin-top:1.5rem; display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+                <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">✓ References: ASSMANG · AngloAmerican · Kumba Iron Ore</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer style="border-top:1px solid rgba(255,255,255,0.06); padding:3rem; background:rgba(4,2,15,0.8);">
+    <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem;">
+        <div>
+            <span class="font-display" style="font-size:1.4rem; color:var(--gold-light);">Jay Roman Media</span>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); margin-top:0.25rem; letter-spacing:0.2em; text-transform:uppercase;">Vision: leading Northern Cape & beyond</p>
+        </div>
+        <div style="display:flex;gap:2rem;">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#team" class="nav-link">Team</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <p style="font-size:0.7rem; color:rgba(255,255,255,0.2);">© 2025 Jay Roman Media — all rights reserved</p>
+    </div>
+</footer>
+
+<!-- floating pill -->
+<div class="glass" style="position:fixed;bottom:2rem;right:2rem;border-radius:999px;padding:0.6rem 1.4rem;z-index:90;border:1px solid rgba(201,168,76,0.2);">
+    <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.7);">professionalism · creativity · authenticity</span>
+</div>
+
+<script>
+    // ── Cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        setTimeout(() => {
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        }, 60);
+    });
+    document.querySelectorAll('a,button,.service-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1.8)';
+            ring.style.borderColor = 'rgba(201,168,76,0.8)';
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1)';
+            ring.style.borderColor = 'rgba(201,168,76,0.5)';
+        });
+    });
+
+    // ── Nav scroll
+    window.addEventListener('scroll', () => {
+        document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

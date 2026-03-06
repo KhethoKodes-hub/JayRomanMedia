@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Roman Media · Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #04020f;
+            --gold: #c9a84c;
+            --gold-light: #e8d08a;
+            --ice: #a8c8e8;
+            --violet: #6a3fa8;
+            --deep: #080520;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
+            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-ring {
+            width: 36px; height: 36px; border: 1.5px solid rgba(201,168,76,0.5); border-radius: 50%;
+            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%); transition: all 0.15s ease;
+        }
+
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+        .font-sans-alt { font-family: 'Syne', sans-serif; }
+
+        .glass {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .glass-gold {
+            background: rgba(201,168,76,0.07);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(201,168,76,0.22);
+        }
+        .glass-dark {
+            background: rgba(4,2,15,0.6);
+            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .grad-text {
+            background: linear-gradient(135deg, #f5f0e8 0%, var(--gold-light) 40%, var(--gold) 70%, #e8a060 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .grad-text-ice {
+            background: linear-gradient(135deg, #fff 0%, var(--ice) 60%, #8090d0 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; transition: all 0.4s ease; }
+        nav.scrolled .nav-inner {
+            background: rgba(4,2,15,0.88); backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+        }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 3rem; transition: all 0.4s; }
+        .nav-link {
+            font-family: 'Syne', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none;
+            position: relative; transition: color 0.3s;
+        }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s ease; }
+        .nav-link:hover { color: var(--gold-light); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: var(--gold-light); }
+        .nav-link.active::after { width: 100%; }
+
+        .divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+        .tag {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Syne', sans-serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 0.4rem 1rem; border-radius: 999px;
+            border: 1px solid rgba(201,168,76,0.35); color: var(--gold-light); background: rgba(201,168,76,0.06);
+        }
+        .section-label {
+            font-family: 'Syne', sans-serif; font-size: 0.65rem; letter-spacing: 0.35em;
+            text-transform: uppercase; color: var(--gold);
+        }
+
+        .hover-card {
+            transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .hover-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(201,168,76,0.05), rgba(106,63,168,0.05));
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .hover-card:hover { transform: translateY(-8px); box-shadow: 0 40px 60px -20px rgba(0,0,0,0.7); }
+        .hover-card:hover::before { opacity: 1; }
+        .hover-card .card-line {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--violet)); transition: width 0.5s ease;
+        }
+        .hover-card:hover .card-line { width: 100%; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.25,.8,.25,1); }
+        .reveal.visible { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        .shimmer {
+            background: linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0) 100%);
+            background-size: 200% 100%; animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .marquee-track { display: flex; gap: 0; white-space: nowrap; animation: marquee 22s linear infinite; }
+
+        .flare { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); opacity: 0.1; }
+
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem,6vw,5rem); line-height: 1;
+            background: linear-gradient(135deg,#fff 20%,var(--gold-light) 80%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .btn-gold {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg,#c9a84c,#e8d08a,#c9a84c);
+            background-size: 200% 100%; background-position: 100%;
+            color: var(--ink); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px;
+            border: none; cursor: none; font-weight: 700; text-decoration: none; display: inline-block;
+            transition: background-position 0.4s ease, transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-gold:hover { background-position: 0%; transform: translateY(-2px); box-shadow: 0 12px 30px -8px rgba(201,168,76,0.5); }
+        .btn-outline {
+            background: transparent; color: rgba(255,255,255,0.85); font-family: 'Syne', sans-serif;
+            font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.9rem 2.2rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.2);
+            cursor: none; font-weight: 600; text-decoration: none; display: inline-block;
+            transition: border-color 0.3s, color 0.3s, background 0.3s;
+        }
+        .btn-outline:hover { border-color: rgba(201,168,76,0.5); color: var(--gold-light); background: rgba(201,168,76,0.06); }
+
+        /* image hover zoom */
+        .img-zoom { overflow: hidden; border-radius: inherit; }
+        .img-zoom img, .img-zoom div { transition: transform 0.6s cubic-bezier(.25,.8,.25,1); }
+        .img-zoom:hover div { transform: scale(1.05); }
+
+        /* number accent */
+        .service-num {
+            font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300;
+            line-height: 1; color: rgba(201,168,76,0.15); position: absolute; top: -1rem; right: 1.5rem;
+            pointer-events: none; user-select: none;
+        }
+
+        .grain::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; opacity: 0.3; border-radius: inherit;
+        }
+
+        @media(max-width:768px){
+            .nav-inner { padding: 1rem 1.5rem; }
+            .nav-links-desktop { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="mainNav">
+    <div class="nav-inner">
+        <a href="index.html" style="text-decoration:none">
+            <div>
+                <span class="font-display" style="font-size:1.6rem;font-weight:600;background:linear-gradient(135deg,#fff,var(--gold-light));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:0.02em;">Jay Roman</span>
+                <span class="font-sans-alt" style="font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(201,168,76,0.7);display:block;margin-top:-2px;padding-left:2px;">Media · beyond the lens</span>
+            </div>
+        </a>
+        <div class="nav-links-desktop" style="display:flex;gap:2.5rem;">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link active">Services</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <a href="contact.html" class="btn-gold" style="font-size:0.65rem;padding:0.6rem 1.4rem;">Book Session</a>
+    </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section style="position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;" class="grain">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?q=90&w=2100&auto=format&fit=crop') center/cover;transform:scale(1.05);transition:transform 8s ease;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(115deg,rgba(4,2,15,0.93) 0%,rgba(20,10,40,0.72) 50%,rgba(4,2,15,0.5) 100%);"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,var(--deep),transparent);"></div>
+    <div class="flare" style="width:500px;height:500px;background:var(--gold);top:-100px;right:5%;"></div>
+    <div class="flare" style="width:350px;height:350px;background:var(--violet);bottom:10%;left:0;"></div>
+
+    <div style="position:relative;width:100%;max-width:1400px;margin:0 auto;padding:0 3rem;padding-top:8rem;">
+        <div style="max-width:780px;">
+            <div class="tag float" style="margin-bottom:2rem;">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+                What we offer · Est. 2016
+            </div>
+            <h1 class="font-display grad-text" style="font-size:clamp(3.5rem,9vw,8rem);line-height:0.92;font-weight:300;letter-spacing:-0.01em;margin-bottom:2rem;">
+                Visual<br>
+                <em style="font-style:italic;">services</em><br>
+                <span style="font-weight:600;">— crafted.</span>
+            </h1>
+            <p style="max-width:520px;color:rgba(255,255,255,0.65);line-height:1.8;font-size:1.05rem;margin-bottom:3rem;">
+                Corporate, lifestyle & brand imagery — every session tailored with precision, creativity, and modern flair for individuals, businesses, and organisations.
+            </p>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                <a href="#corporate" class="btn-gold">Explore services</a>
+                <a href="contact.html" class="btn-outline">Book a session</a>
+            </div>
+        </div>
+
+        <!-- stat row -->
+        <div style="display:flex;gap:3rem;margin-top:5rem;flex-wrap:wrap;">
+            <div>
+                <div class="stat-num">6</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Service types</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+            <div>
+                <div class="stat-num">9+</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Years of craft</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+            <div>
+                <div class="stat-num">24h</div>
+                <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.2rem;">Response time</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ MARQUEE ═══════ -->
+<div style="overflow:hidden;border-top:1px solid rgba(201,168,76,0.12);border-bottom:1px solid rgba(201,168,76,0.12);padding:1rem 0;background:rgba(201,168,76,0.03);">
+    <div class="marquee-track">
+        <span style="font-family:'Syne',sans-serif;font-size:0.65rem;letter-spacing:0.3em;color:rgba(201,168,76,0.6);text-transform:uppercase;padding:0 3rem;">◈ Corporate Headshots ◈ Team Portraits ◈ On-site Documentation ◈ Lifestyle Sessions ◈ Maternity Photography ◈ Brand Campaigns ◈ Event Coverage ◈ Product Imagery ◈ Moving Image ◈ Industrial Photography ◈</span>
+        <span style="font-family:'Syne',sans-serif;font-size:0.65rem;letter-spacing:0.3em;color:rgba(201,168,76,0.6);text-transform:uppercase;padding:0 3rem;">◈ Corporate Headshots ◈ Team Portraits ◈ On-site Documentation ◈ Lifestyle Sessions ◈ Maternity Photography ◈ Brand Campaigns ◈ Event Coverage ◈ Product Imagery ◈ Moving Image ◈ Industrial Photography ◈</span>
+    </div>
+</div>
+
+<!-- ═══════ INTRO ═══════ -->
+<section style="padding:8rem 3rem 5rem;position:relative;overflow:hidden;">
+    <div class="flare" style="width:600px;height:600px;background:var(--violet);top:-100px;left:-200px;opacity:0.06;"></div>
+    <div style="max-width:1400px;margin:0 auto;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
+            <div class="reveal">
+                <p class="section-label" style="margin-bottom:1rem;">Our offering</p>
+                <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4.5rem);font-weight:300;line-height:1.1;margin-bottom:2rem;">
+                    Photography<br><em>solutions</em> for every<br>client & story
+                </h2>
+                <div class="divider" style="margin-bottom:2rem;"></div>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.9;font-size:0.95rem;margin-bottom:1.5rem;">
+                    Jay Roman Media offers a wide range of professional photography solutions, designed to meet the needs of both corporate and individual clients. Every session is crafted with precision, creativity, and a modern flair.
+                </p>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.9;font-size:0.95rem;">
+                    Unlike traditional photographers who merely capture images, we create media solutions tailored to help individuals and companies present themselves powerfully and professionally.
+                </p>
+            </div>
+            <div class="reveal reveal-delay-2" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div class="glass hover-card img-zoom" style="border-radius:20px;height:220px;">
+                        <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop') center/cover;border-radius:20px;position:relative;">
+                            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(4,2,15,0.75) 100%);border-radius:20px;"></div>
+                            <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Corporate</span></div>
+                        </div>
+                        <div class="card-line"></div>
+                    </div>
+                    <div class="glass hover-card img-zoom" style="border-radius:20px;height:160px;">
+                        <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1611601322175-ef8ec8c5c49d?q=80&w=800&auto=format&fit=crop') center/cover;border-radius:20px;position:relative;">
+                            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.75) 100%);border-radius:20px;"></div>
+                            <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Maternity</span></div>
+                        </div>
+                        <div class="card-line"></div>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;margin-top:2rem;">
+                    <div class="glass hover-card img-zoom" style="border-radius:20px;height:160px;">
+                        <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=800&auto=format&fit=crop') center/cover;border-radius:20px;position:relative;">
+                            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.75) 100%);border-radius:20px;"></div>
+                            <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Lifestyle</span></div>
+                        </div>
+                        <div class="card-line"></div>
+                    </div>
+                    <div class="glass hover-card img-zoom" style="border-radius:20px;height:220px;">
+                        <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1551817958-c5b51e7b4a33?q=80&w=800&auto=format&fit=crop') center/cover;border-radius:20px;position:relative;">
+                            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.75) 100%);border-radius:20px;"></div>
+                            <div style="position:absolute;bottom:1rem;left:1rem;"><span class="tag" style="font-size:0.55rem;">Brand</span></div>
+                        </div>
+                        <div class="card-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ CORPORATE PHOTOGRAPHY ═══════ -->
+<section id="corporate" style="padding:6rem 3rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1557804486-ef2ae124bedc?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.05;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 20%,rgba(10,5,30,0.9) 100%);"></div>
+    <div class="flare" style="width:600px;height:600px;background:var(--gold);top:-200px;right:-200px;opacity:0.06;"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="display:flex;align-items:center;gap:2rem;margin-bottom:5rem;flex-wrap:wrap;">
+            <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#3b5ec8,#6a3fa8);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;">🏛️</div>
+            <div>
+                <p class="section-label" style="margin-bottom:0.4rem;">01</p>
+                <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1;">
+                    Corporate <em>photography</em>
+                </h2>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem;">
+            <!-- headshots card — wide image -->
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:24px;overflow:hidden;grid-row:span 2;display:flex;flex-direction:column;">
+                <div class="img-zoom" style="height:300px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=900&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                </div>
+                <div style="padding:2.5rem;flex:1;">
+                    <div class="card-line"></div>
+                    <span class="service-num">01</span>
+                    <p class="section-label" style="margin-bottom:0.75rem;">Headshots</p>
+                    <h3 class="font-display" style="font-size:2rem;font-weight:400;line-height:1.1;margin-bottom:1rem;color:var(--gold-light);">Professional <em>Headshots</em></h3>
+                    <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);line-height:1.8;">Enhance your personal brand and corporate identity with polished, studio-quality headshots that make a lasting first impression. Natural, modern, and precisely composed.</p>
+                </div>
+            </div>
+
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:24px;overflow:hidden;">
+                <div class="img-zoom" style="height:200px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1600880292089-90a7e086ee2c?q=80&w=900&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                </div>
+                <div style="padding:2rem;">
+                    <div class="card-line"></div>
+                    <span class="service-num" style="font-size:3.5rem;">02</span>
+                    <p class="section-label" style="margin-bottom:0.5rem;">Team</p>
+                    <h3 class="font-display" style="font-size:1.7rem;font-weight:400;margin-bottom:0.75rem;color:var(--gold-light);">Team <em>Portraits</em></h3>
+                    <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;">Showcase your business team with creative, professional group portraits that reflect your culture and brand identity.</p>
+                </div>
+            </div>
+
+            <div class="glass hover-card reveal reveal-delay-3" style="border-radius:24px;overflow:hidden;">
+                <div class="img-zoom" style="height:200px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=900&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.8) 100%);"></div>
+                </div>
+                <div style="padding:2rem;">
+                    <div class="card-line"></div>
+                    <span class="service-num" style="font-size:3.5rem;">03</span>
+                    <p class="section-label" style="margin-bottom:0.5rem;">On-site</p>
+                    <h3 class="font-display" style="font-size:1.7rem;font-weight:400;margin-bottom:0.75rem;color:var(--gold-light);">On-site <em>Documentation</em></h3>
+                    <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;">Capture your business in action — workspaces, events, and day-to-day operations for branding and marketing purposes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ LIFESTYLE PHOTOGRAPHY ═══════ -->
+<section id="lifestyle" style="padding:6rem 3rem;position:relative;overflow:hidden;">
+    <div class="flare" style="width:700px;height:700px;background:var(--violet);bottom:-200px;left:-300px;opacity:0.07;"></div>
+
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="display:flex;align-items:center;gap:2rem;margin-bottom:5rem;flex-wrap:wrap;">
+            <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#8a4a9a,#c86080);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;">🌿</div>
+            <div>
+                <p class="section-label" style="margin-bottom:0.4rem;">02</p>
+                <h2 class="font-display grad-text-ice" style="font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1;">
+                    Lifestyle <em>photography</em>
+                </h2>
+            </div>
+        </div>
+
+        <!-- full-width lifestyle feature -->
+        <div class="glass reveal" style="border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:500px;margin-bottom:2rem;">
+            <div style="position:relative;" class="img-zoom">
+                <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?q=80&w=1000&auto=format&fit=crop') center/cover;min-height:500px;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(4,2,15,0.5));"></div>
+                <div style="position:absolute;top:1.5rem;left:1.5rem;"><span class="tag">Lifestyle & Portraits</span></div>
+            </div>
+            <div style="padding:3.5rem;display:flex;flex-direction:column;justify-content:center;">
+                <p class="section-label" style="margin-bottom:1rem;">Individual & Couple Sessions</p>
+                <h3 class="font-display grad-text-ice" style="font-size:2.5rem;font-weight:400;line-height:1.1;margin-bottom:1.5rem;">
+                    Natural portraits<br><em>that tell your story</em>
+                </h3>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">
+                    Natural and styled portraits that highlight unique personalities and connections. From individuals to couples, every session is approached with the same dedication to authentic, beautiful imagery.
+                </p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Individual & couple sessions</p></div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Employee & family portraits</p></div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Styled & natural light options</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- maternity feature -->
+        <div class="glass reveal reveal-delay-2" style="border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:440px;">
+            <div style="padding:3.5rem;display:flex;flex-direction:column;justify-content:center;">
+                <p class="section-label" style="margin-bottom:1rem;">Maternity Photography</p>
+                <h3 class="font-display grad-text" style="font-size:2.5rem;font-weight:400;line-height:1.1;margin-bottom:1.5rem;">
+                    Celebrating<br><em>new life</em>
+                </h3>
+                <p style="color:rgba(255,255,255,0.65);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">
+                    Celebrating the beauty of motherhood with timeless, intimate photography sessions. We create a comfortable, relaxed environment where genuine emotions shine through every frame.
+                </p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Studio & outdoor sessions</p></div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Partner & family inclusions</p></div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--gold);">—</span><p style="font-size:0.85rem;color:rgba(255,255,255,0.6);">Timeless, intimate compositions</p></div>
+                </div>
+            </div>
+            <div style="position:relative;" class="img-zoom">
+                <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=1000&auto=format&fit=crop') center/cover;min-height:440px;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(to left,transparent 60%,rgba(4,2,15,0.5));"></div>
+                <div style="position:absolute;top:1.5rem;right:1.5rem;"><span class="tag">Maternity</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ BRAND & ORGANISATIONS ═══════ -->
+<section id="brand" style="padding:6rem 3rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1557804486-ef2ae124bedc?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.04;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 20%,rgba(30,10,60,0.85) 100%);"></div>
+    <div class="flare" style="width:600px;height:600px;background:var(--gold);top:-100px;right:-200px;opacity:0.05;"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="display:flex;align-items:center;gap:2rem;margin-bottom:5rem;flex-wrap:wrap;">
+            <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#e8a060);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;">🏛️</div>
+            <div>
+                <p class="section-label" style="margin-bottom:0.4rem;">03</p>
+                <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,4vw,4rem);font-weight:300;line-height:1.1;">
+                    Brand &amp; <em>organisation</em> services
+                </h2>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:24px;overflow:hidden;">
+                <div class="img-zoom" style="height:200px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1551817958-c5b51e7b4a33?q=80&w=800&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.85) 100%);"></div>
+                </div>
+                <div style="padding:2.2rem;">
+                    <div class="card-line"></div>
+                    <span class="service-num" style="font-size:3.5rem;">04</span>
+                    <p class="section-label" style="margin-bottom:0.5rem;">Product</p>
+                    <h3 class="font-display" style="font-size:1.7rem;font-weight:400;margin-bottom:0.75rem;color:var(--gold-light);">Product &amp; <em>Brand Imagery</em></h3>
+                    <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;">High-end commercial shots for marketing, packaging, and digital campaigns. We tell your brand's visual story with precision.</p>
+                </div>
+            </div>
+
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:24px;overflow:hidden;">
+                <div class="img-zoom" style="height:200px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1492538368677-f6e0afe31dcc?q=80&w=800&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.85) 100%);"></div>
+                </div>
+                <div style="padding:2.2rem;">
+                    <div class="card-line"></div>
+                    <span class="service-num" style="font-size:3.5rem;">05</span>
+                    <p class="section-label" style="margin-bottom:0.5rem;">Events</p>
+                    <h3 class="font-display" style="font-size:1.7rem;font-weight:400;margin-bottom:0.75rem;color:var(--gold-light);">Event &amp; <em>Conference Coverage</em></h3>
+                    <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;">Document corporate events, awards, and gatherings with a photojournalistic touch that captures every decisive moment.</p>
+                </div>
+            </div>
+
+            <div class="glass-gold hover-card reveal reveal-delay-3" style="border-radius:24px;overflow:hidden;">
+                <div class="img-zoom" style="height:200px;position:relative;">
+                    <div style="width:100%;height:100%;background:url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?q=80&w=800&auto=format&fit=crop') center/cover;"></div>
+                    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,2,15,0.85) 100%);"></div>
+                </div>
+                <div style="padding:2.2rem;">
+                    <div class="card-line"></div>
+                    <span class="service-num" style="font-size:3.5rem;color:rgba(201,168,76,0.2);">06</span>
+                    <p class="section-label" style="margin-bottom:0.5rem;">Industrial</p>
+                    <h3 class="font-display" style="font-size:1.7rem;font-weight:400;margin-bottom:0.75rem;color:var(--gold-light);">Industrial &amp; <em>Mining</em></h3>
+                    <p style="font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;">Specialist on-site documentation for ASSMANG, AngloAmerican, Kumba Iron Ore — trusted across the mining sector.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ MOVING IMAGE ═══════ -->
+<section style="padding:2rem 3rem 8rem;">
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="glass reveal" style="border-radius:28px;overflow:hidden;position:relative;min-height:320px;display:flex;align-items:center;">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.18;"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.9) 30%,rgba(30,10,60,0.6) 100%);"></div>
+            <div class="flare" style="width:400px;height:400px;background:var(--gold);top:-100px;right:0;opacity:0.08;"></div>
+            <div style="position:relative;padding:4rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%;">
+                <div>
+                    <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#1a6080,#2a90c0);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.5rem;">🎬</div>
+                    <p class="section-label" style="margin-bottom:0.75rem;">07 · Moving Image</p>
+                    <h3 class="font-display grad-text" style="font-size:2.8rem;font-weight:300;line-height:1.1;margin-bottom:1.5rem;">
+                        Video &amp; <em>moving image</em> production
+                    </h3>
+                    <p style="color:rgba(255,255,255,0.65);line-height:1.8;font-size:0.95rem;">
+                        Beyond the still frame — video production and visual content for social media, corporate presentations, and event highlights. Crafted with the same precision and artistry as our photography.
+                    </p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div style="display:flex;align-items:center;gap:1rem;padding:1.2rem;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+                        <span style="color:var(--gold);font-size:1.2rem;">▶</span>
+                        <div>
+                            <p style="font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:600;margin-bottom:0.15rem;">Social media content</p>
+                            <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);">Reels, TikToks, short-form video</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:1rem;padding:1.2rem;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+                        <span style="color:var(--gold);font-size:1.2rem;">▶</span>
+                        <div>
+                            <p style="font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:600;margin-bottom:0.15rem;">Corporate video</p>
+                            <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);">Presentations & brand films</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:1rem;padding:1.2rem;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+                        <span style="color:var(--gold);font-size:1.2rem;">▶</span>
+                        <div>
+                            <p style="font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:600;margin-bottom:0.15rem;">Event highlights</p>
+                            <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);">Cinematic event recaps</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ CLIENTS ═══════ -->
+<section style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.04;"></div>
+    <div style="max-width:1000px;margin:0 auto;text-align:center;">
+        <p class="section-label reveal" style="margin-bottom:1.5rem;">Trusted by</p>
+        <h2 class="font-display grad-text reveal" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;line-height:1.1;margin-bottom:3rem;">
+            Industry <em>leaders</em> trust us
+        </h2>
+        <div class="glass reveal" style="border-radius:24px;padding:3rem 4rem;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;">
+            <div style="flex:1;min-width:180px;padding:1.5rem;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
+                <p class="font-display" style="font-size:1.8rem;font-weight:600;color:var(--gold-light);">ASSMANG</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.25rem;letter-spacing:0.15em;text-transform:uppercase;">Mining Group</p>
+            </div>
+            <div style="flex:1;min-width:180px;padding:1.5rem;text-align:center;border-right:1px solid rgba(255,255,255,0.08);">
+                <p class="font-display" style="font-size:1.8rem;font-weight:600;color:var(--gold-light);">AngloAmerican</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.25rem;letter-spacing:0.15em;text-transform:uppercase;">Global Resources</p>
+            </div>
+            <div style="flex:1;min-width:180px;padding:1.5rem;text-align:center;">
+                <p class="font-display" style="font-size:1.8rem;font-weight:600;color:var(--gold-light);">Kumba Iron Ore</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.25rem;letter-spacing:0.15em;text-transform:uppercase;">Iron Ore Producer</p>
+            </div>
+        </div>
+        <p class="reveal" style="margin-top:2rem;font-size:0.85rem;color:rgba(255,255,255,0.35);font-style:italic;">"Exceptional work" — Cecilia Zietsman, Communication & Engagement, Anglo American · Rosebank</p>
+    </div>
+</section>
+
+<!-- ═══════ WHY CHOOSE US ═══════ -->
+<section style="padding:2rem 3rem 8rem;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.97) 20%,rgba(30,10,60,0.7) 100%);"></div>
+    <div class="flare" style="width:600px;height:600px;background:var(--violet);bottom:-200px;right:-200px;opacity:0.06;"></div>
+
+    <div style="position:relative;max-width:1400px;margin:0 auto;">
+        <div class="reveal" style="text-align:center;margin-bottom:5rem;">
+            <p class="section-label" style="margin-bottom:1rem;">Why clients choose us</p>
+            <h2 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem);font-weight:300;line-height:1.1;">
+                The <em>Jay Roman</em> difference
+            </h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;">
+            <div class="glass hover-card reveal reveal-delay-1" style="border-radius:20px;padding:2rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem;margin-bottom:1.2rem;">⭐</div>
+                <h4 class="font-display" style="font-size:1.4rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Est. 2016</h4>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.6;">Proven 9-year track record across Southern Africa.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-2" style="border-radius:20px;padding:2rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem;margin-bottom:1.2rem;">✨</div>
+                <h4 class="font-display" style="font-size:1.4rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Modern Style</h4>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.6;">Natural elegance meets contemporary visual language.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-3" style="border-radius:20px;padding:2rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem;margin-bottom:1.2rem;">🔍</div>
+                <h4 class="font-display" style="font-size:1.4rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Detail-obsessed</h4>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.6;">Every frame held to the highest standard — no exceptions.</p>
+            </div>
+            <div class="glass hover-card reveal reveal-delay-4" style="border-radius:20px;padding:2rem;text-align:center;">
+                <div class="card-line"></div>
+                <div style="font-size:2.5rem;margin-bottom:1.2rem;">🤝</div>
+                <h4 class="font-display" style="font-size:1.4rem;font-weight:400;margin-bottom:0.5rem;color:var(--gold-light);">Client-centered</h4>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.6;">Tailored to your vision, your story, your brand.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ BOOKING CTA ═══════ -->
+<section style="padding:2rem 3rem 8rem;">
+    <div style="max-width:1400px;margin:0 auto;">
+        <div class="glass reveal" style="border-radius:28px;overflow:hidden;position:relative;text-align:center;padding:6rem 3rem;">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1800&auto=format&fit=crop') center/cover;opacity:0.07;"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,2,15,0.92),rgba(30,10,60,0.85));"></div>
+            <div class="flare" style="width:500px;height:500px;background:var(--gold);top:-200px;right:-100px;opacity:0.08;"></div>
+            <div class="flare" style="width:400px;height:400px;background:var(--violet);bottom:-150px;left:-100px;opacity:0.07;"></div>
+
+            <div style="position:relative;">
+                <p class="section-label" style="margin-bottom:1rem;">Ready to start?</p>
+                <h3 class="font-display grad-text" style="font-size:clamp(2.5rem,5vw,5rem);font-weight:300;line-height:1.05;margin-bottom:1.5rem;">
+                    Book your<br><em>perfect session</em>
+                </h3>
+                <p style="max-width:520px;margin:0 auto 3rem;color:rgba(255,255,255,0.6);line-height:1.8;font-size:0.95rem;">
+                    Custom packages for corporate, lifestyle & maternity — we'll tailor the perfect experience for your vision. Response within 24 hours.
+                </p>
+
+                <div style="display:flex;justify-content:center;gap:3rem;margin-bottom:3rem;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📧</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--gold-light);">goodmenpictures@gmail.com</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📞</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--gold-light);">066 383 8944</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📍</div>
+                        <span style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--gold-light);">Kathu, Northern Cape</span>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+                    <a href="contact.html" class="btn-gold">Inquire now →</a>
+                    <a href="about.html" class="btn-outline">Learn about us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer style="border-top:1px solid rgba(255,255,255,0.06);padding:3rem;background:rgba(4,2,15,0.8);">
+    <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
+        <div>
+            <span class="font-display" style="font-size:1.4rem;color:var(--gold-light);">Jay Roman Media</span>
+            <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:0.25rem;letter-spacing:0.2em;text-transform:uppercase;">Vision: leading Northern Cape & beyond</p>
+        </div>
+        <div style="display:flex;gap:2rem;">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link active">Services</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,0.2);">© 2025 Jay Roman Media — all rights reserved</p>
+    </div>
+</footer>
+
+<!-- floating pill -->
+<div class="glass" style="position:fixed;bottom:2rem;left:2rem;border-radius:999px;padding:0.6rem 1.4rem;z-index:90;border:1px solid rgba(201,168,76,0.2);">
+    <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.7);">◈ corporate · lifestyle · maternity</span>
+</div>
+
+<script>
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        setTimeout(() => {
+            ring.style.left = e.clientX + 'px';
+            ring.style.top = e.clientY + 'px';
+        }, 60);
+    });
+    document.querySelectorAll('a,button,.hover-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1.8)';
+            ring.style.borderColor = 'rgba(201,168,76,0.8)';
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.style.transform = 'translate(-50%,-50%) scale(1)';
+            ring.style.borderColor = 'rgba(201,168,76,0.5)';
+        });
+    });
+
+    window.addEventListener('scroll', () => {
+        document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
