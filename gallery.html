@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery · Jay Roman Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #04020f;
+            --cream: #f5f0e8;
+            --gold: #c9a84c;
+            --gold-light: #e8d08a;
+            --ice: #a8c8e8;
+            --violet: #6a3fa8;
+            --rose: #c86080;
+            --deep: #080520;
+            --amber: #e8a060;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── CURSOR ── */
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--gold);
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%,-50%);
+            transition: transform 0.05s;
+            mix-blend-mode: difference;
+        }
+        .cursor-ring {
+            width: 40px; height: 40px;
+            border: 1.5px solid rgba(201,168,76,0.6);
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 9998;
+            transform: translate(-50%,-50%);
+            transition: all 0.18s cubic-bezier(.25,.8,.25,1);
+        }
+        .cursor-text {
+            position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9997;
+            transform: translate(-50%,-50%);
+            font-family: 'Syne', sans-serif; font-size: 0.55rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--gold);
+            opacity: 0; transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(8,5,32,0.92);
+            backdrop-filter: blur(28px);
+            border-bottom: 1px solid rgba(201,168,76,0.12);
+        }
+        .nav-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.2rem 3rem;
+        }
+        .nav-link {
+            font-family: 'Syne', sans-serif; font-size: 0.72rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.6);
+            text-decoration: none; position: relative; transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: var(--gold-light); }
+        .nav-link:hover::after { width: 100%; }
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+        .btn-gold {
+            background: linear-gradient(135deg, #c9a84c, #e8d08a);
+            color: #04020f; font-family: 'Syne', sans-serif; font-size: 0.65rem;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            padding: 0.6rem 1.4rem; border-radius: 999px; border: none; cursor: none;
+            font-weight: 700; text-decoration: none; transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -6px rgba(201,168,76,0.5); }
+
+        /* ══════════════════════════════
+           HERO STRIP
+        ══════════════════════════════ */
+        .gallery-hero {
+            padding: 8rem 3rem 4rem;
+            position: relative; overflow: hidden;
+        }
+        .gallery-hero::before {
+            content: 'GALLERY';
+            position: absolute; bottom: -2rem; left: 50%; transform: translateX(-50%);
+            font-family: 'Syne', sans-serif; font-size: 18vw; font-weight: 800;
+            color: transparent; -webkit-text-stroke: 1px rgba(201,168,76,0.04);
+            white-space: nowrap; pointer-events: none; letter-spacing: -0.05em;
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+        .section-label {
+            font-family: 'Syne', sans-serif; font-size: 0.65rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold);
+        }
+
+        /* ══════════════════════════════
+           CATEGORY FILTER
+        ══════════════════════════════ */
+        .filter-bar {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+            max-width: 1400px; margin: 0 auto 5rem;
+            padding: 0 3rem;
+        }
+        .filter-btn {
+            font-family: 'Syne', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em;
+            text-transform: uppercase; padding: 0.55rem 1.4rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.5);
+            background: transparent; cursor: none; transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            position: relative; overflow: hidden;
+        }
+        .filter-btn::before {
+            content: ''; position: absolute; inset: 0; border-radius: 999px;
+            background: linear-gradient(135deg, var(--gold), var(--amber));
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .filter-btn span { position: relative; z-index: 1; }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--gold); color: var(--ink);
+        }
+        .filter-btn:hover::before, .filter-btn.active::before { opacity: 1; }
+
+        /* ══════════════════════════════
+           THE DARKROOM GRID
+           Key concept: images start "undeveloped"
+           (dark, sepia grain overlay) and
+           DEVELOP on hover — chemical bath sweep
+        ══════════════════════════════ */
+        .gallery-grid {
+            max-width: 1400px; margin: 0 auto;
+            padding: 0 3rem 6rem;
+            columns: 4 280px; gap: 1rem;
+        }
+
+        .film-frame {
+            break-inside: avoid; margin-bottom: 1rem;
+            position: relative; border-radius: 12px; overflow: hidden;
+            cursor: none;
+            /* Film perforations top/bottom via outline trick */
+        }
+
+        /* The actual image container */
+        .film-img-wrap {
+            position: relative; overflow: hidden; border-radius: 12px;
+            transform: translateZ(0); /* GPU layer */
+        }
+
+        .film-img-wrap img {
+            width: 100%; display: block;
+            filter: sepia(0.9) brightness(0.35) contrast(1.2) saturate(0.3);
+            transform: scale(1.04);
+            transition:
+                filter 0.8s cubic-bezier(.77,0,.175,1),
+                transform 0.8s cubic-bezier(.25,.8,.25,1);
+            will-change: filter, transform;
+        }
+
+        /* Chemical develop sweep — pseudo element wipes across */
+        .film-img-wrap::before {
+            content: '';
+            position: absolute; inset: 0; z-index: 2; border-radius: 12px;
+            background: linear-gradient(
+                105deg,
+                rgba(201,168,76,0.0) 0%,
+                rgba(201,168,76,0.18) 40%,
+                rgba(232,208,138,0.06) 55%,
+                rgba(0,0,0,0) 70%
+            );
+            transform: translateX(-110%);
+            transition: transform 0.0s; /* Reset on leave */
+            pointer-events: none;
+        }
+
+        /* Grain overlay — always present but fades */
+        .film-grain {
+            position: absolute; inset: 0; z-index: 3; border-radius: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+            opacity: 0.55; pointer-events: none; mix-blend-mode: overlay;
+            transition: opacity 0.8s ease;
+        }
+
+        /* Dark vignette that lifts on hover */
+        .film-vignette {
+            position: absolute; inset: 0; z-index: 4; border-radius: 12px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(4,2,15,0.7) 100%);
+            transition: opacity 0.6s ease;
+        }
+
+        /* Info overlay — slides up from bottom */
+        .film-info {
+            position: absolute; bottom: 0; left: 0; right: 0; z-index: 6;
+            padding: 2rem 1.4rem 1.4rem;
+            background: linear-gradient(to top, rgba(4,2,15,0.96) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(.25,.8,.25,1);
+            border-radius: 0 0 12px 12px;
+        }
+        .film-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; font-weight: 400; line-height: 1.1;
+            color: var(--gold-light); margin-bottom: 0.3rem;
+        }
+        .film-meta {
+            font-family: 'Syne', sans-serif; font-size: 0.6rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Film sprocket holes decoration */
+        .film-sprocket {
+            position: absolute; top: 0; bottom: 0; z-index: 5;
+            width: 16px; display: flex; flex-direction: column;
+            justify-content: space-around; align-items: center;
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .film-sprocket.left { left: 0; background: rgba(4,2,15,0.7); }
+        .film-sprocket.right { right: 0; background: rgba(4,2,15,0.7); }
+        .film-sprocket .hole {
+            width: 7px; height: 7px; border-radius: 1px;
+            background: rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+        }
+
+        /* ── HOVER STATE ── */
+        .film-frame:hover .film-img-wrap img {
+            filter: sepia(0) brightness(1) contrast(1) saturate(1);
+            transform: scale(1.08);
+        }
+        .film-frame:hover .film-img-wrap::before {
+            transform: translateX(110%);
+            transition: transform 0.9s cubic-bezier(.77,0,.175,1);
+        }
+        .film-frame:hover .film-grain { opacity: 0.08; }
+        .film-frame:hover .film-vignette { opacity: 0.4; }
+        .film-frame:hover .film-info { transform: translateY(0); }
+        .film-frame:hover .film-sprocket { opacity: 1; }
+
+        /* Category badge */
+        .film-badge {
+            position: absolute; top: 1rem; right: 1rem; z-index: 7;
+            font-family: 'Syne', sans-serif; font-size: 0.55rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 0.3rem 0.8rem; border-radius: 999px;
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--gold-light);
+            opacity: 0; transform: translateY(-6px);
+            transition: all 0.4s ease 0.1s;
+        }
+        .film-frame:hover .film-badge { opacity: 1; transform: translateY(0); }
+
+        /* ══════════════════════════════
+           FEATURED / HERO SHOT STRIP
+           Full-width horizontal scroll
+           with magnetic snap
+        ══════════════════════════════ */
+        .filmstrip-section {
+            padding: 5rem 0; position: relative; overflow: hidden;
+            border-top: 1px solid rgba(201,168,76,0.08);
+            border-bottom: 1px solid rgba(201,168,76,0.08);
+            background: rgba(4,2,15,0.5);
+        }
+        .filmstrip-label {
+            padding: 0 3rem; margin-bottom: 2rem;
+            max-width: 1400px; margin-left: auto; margin-right: auto;
+        }
+        .filmstrip-scroll {
+            display: flex; gap: 1.5rem; padding: 1rem 3rem 2rem;
+            overflow-x: auto; overflow-y: visible;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            cursor: none;
+        }
+        .filmstrip-scroll::-webkit-scrollbar { display: none; }
+
+        .strip-card {
+            flex-shrink: 0; position: relative;
+            border-radius: 16px; overflow: hidden;
+            scroll-snap-align: start;
+            /* film border look */
+            outline: 3px solid rgba(201,168,76,0.0);
+            transition: outline-color 0.4s, transform 0.4s cubic-bezier(.25,.8,.25,1);
+        }
+        .strip-card::before {
+            content: '';
+            position: absolute; inset: 0; z-index: 2;
+            background: rgba(4,2,15,0.7);
+            transition: background 0.5s ease;
+        }
+        .strip-card:hover {
+            outline-color: rgba(201,168,76,0.5);
+            transform: translateY(-12px) scale(1.02);
+            z-index: 10;
+        }
+        .strip-card:hover::before { background: rgba(4,2,15,0.1); }
+        .strip-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .strip-card-label {
+            position: absolute; bottom: 1rem; left: 1rem; z-index: 3;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; font-weight: 300; font-style: italic;
+            color: rgba(255,255,255,0.4);
+            transition: color 0.4s, transform 0.4s;
+            transform: translateY(4px);
+        }
+        .strip-card:hover .strip-card-label {
+            color: var(--gold-light);
+            transform: translateY(0);
+        }
+
+        /* ══════════════════════════════
+           STATS MARQUEE
+        ══════════════════════════════ */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: flex; gap: 0; white-space: nowrap;
+            animation: marquee 28s linear infinite;
+        }
+        .marquee-item {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem; font-weight: 300; font-style: italic;
+            color: transparent; -webkit-text-stroke: 1px rgba(201,168,76,0.2);
+            padding: 0 3rem; letter-spacing: -0.02em;
+            transition: -webkit-text-stroke-color 0.3s, color 0.3s;
+            cursor: none;
+        }
+        .marquee-item:hover {
+            -webkit-text-stroke-color: rgba(201,168,76,0.7);
+            color: rgba(201,168,76,0.1);
+        }
+        .marquee-dot { color: var(--gold); -webkit-text-stroke: none; font-size: 1rem; vertical-align: middle; }
+
+        /* ══════════════════════════════
+           LIGHTBOX
+        ══════════════════════════════ */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(4,2,15,0.97);
+            backdrop-filter: blur(40px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+
+        .lightbox-inner {
+            position: relative; max-width: 90vw; max-height: 85vh;
+            display: flex; align-items: center; gap: 3rem;
+        }
+        .lightbox-img-wrap {
+            position: relative; overflow: hidden; border-radius: 16px;
+            box-shadow: 0 60px 120px -30px rgba(0,0,0,0.8),
+                        0 0 0 1px rgba(201,168,76,0.12);
+            transform: scale(0.92);
+            transition: transform 0.5s cubic-bezier(.25,.8,.25,1);
+        }
+        .lightbox.active .lightbox-img-wrap { transform: scale(1); }
+        .lightbox-img-wrap img { max-width: 70vw; max-height: 80vh; display: block; border-radius: 16px; }
+
+        .lightbox-info {
+            min-width: 220px; max-width: 280px;
+            opacity: 0; transform: translateX(20px);
+            transition: all 0.5s ease 0.2s;
+        }
+        .lightbox.active .lightbox-info { opacity: 1; transform: none; }
+        .lightbox-close {
+            position: absolute; top: -3rem; right: 0;
+            font-family: 'Syne', sans-serif; font-size: 0.65rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.4); background: none;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 999px;
+            padding: 0.4rem 1rem; cursor: none;
+            transition: all 0.3s;
+        }
+        .lightbox-close:hover { color: var(--gold); border-color: var(--gold); }
+
+        .lb-nav-btn {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6); font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: none; transition: all 0.3s;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            flex-shrink: 0;
+        }
+        .lb-nav-btn:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+        .lb-nav-btn.prev { left: -4rem; }
+        .lb-nav-btn.next { right: -4rem; }
+
+        /* ══════════════════════════════
+           CONTACT CTA
+        ══════════════════════════════ */
+        .gallery-cta {
+            padding: 8rem 3rem; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .gallery-cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center bottom, rgba(106,63,168,0.15) 0%, transparent 70%);
+        }
+
+        /* Animate in on scroll */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.25,.8,.25,1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        /* ══════════════════════════════
+           GLASS UTILS
+        ══════════════════════════════ */
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tag {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Syne', sans-serif; font-size: 0.6rem;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            padding: 0.35rem 0.9rem; border-radius: 999px;
+            border: 1px solid rgba(201,168,76,0.3);
+            color: var(--gold-light); background: rgba(201,168,76,0.06);
+        }
+
+        /* ══════════════════════════════
+           EXPOSURE COUNTER — decorative
+        ══════════════════════════════ */
+        .exposure-counter {
+            position: fixed; left: 2rem; top: 50%; transform: translateY(-50%);
+            z-index: 80; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+        }
+        .exp-line {
+            width: 1px; height: 60px;
+            background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent);
+        }
+        .exp-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem; font-weight: 300; color: rgba(201,168,76,0.15);
+            writing-mode: vertical-rl; letter-spacing: 0.1em;
+        }
+        .exp-label {
+            font-family: 'Syne', sans-serif; font-size: 0.5rem;
+            letter-spacing: 0.35em; text-transform: uppercase;
+            color: rgba(201,168,76,0.25); writing-mode: vertical-rl;
+        }
+
+        @media (max-width: 900px) {
+            .exposure-counter { display: none; }
+            .nav-links { display: none !important; }
+            .gallery-grid { columns: 2 160px; padding: 0 1rem 4rem; }
+            .filter-bar { padding: 0 1rem; }
+            .lightbox-info { display: none; }
+            .lb-nav-btn.prev { left: -2.5rem; }
+            .lb-nav-btn.next { right: -2.5rem; }
+            .lightbox-img-wrap img { max-width: 85vw; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-text" id="cursorText">develop</div>
+
+<!-- ── EXPOSURE COUNTER (decorative left rail) ── -->
+<div class="exposure-counter">
+    <div class="exp-line"></div>
+    <div class="exp-num" id="expCount">01</div>
+    <div class="exp-label">exposure</div>
+    <div class="exp-line"></div>
+</div>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" style="text-decoration:none">
+            <div>
+                <span class="font-display" style="font-size:1.5rem; font-weight:600; background:linear-gradient(135deg,#fff,var(--gold-light)); -webkit-background-clip:text; background-clip:text; color:transparent;">Jay Roman</span>
+                <span style="font-family:'Syne',sans-serif; font-size:0.55rem; letter-spacing:0.35em; text-transform:uppercase; color:rgba(201,168,76,0.6); display:block; margin-top:-2px; padding-left:2px;">Media · beyond the lens</span>
+            </div>
+        </a>
+        <div class="nav-links" style="display:flex; gap:2.5rem;">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="services.html" class="nav-link">Services</a>
+            <a href="gallery.html" class="nav-link" style="color:var(--gold);">Gallery</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <a href="index.html#contact" class="btn-gold">Book Session</a>
+    </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="gallery-hero">
+    <div class="hero-content">
+        <div class="reveal">
+            <p class="section-label" style="margin-bottom:1rem;">The Darkroom</p>
+            <h1 class="font-display" style="font-size:clamp(4rem,10vw,9rem); font-weight:300; line-height:0.9; letter-spacing:-0.02em; margin-bottom:1.5rem;">
+                <span style="background:linear-gradient(135deg,#f5f0e8 0%,var(--gold-light) 40%,var(--gold) 70%); -webkit-background-clip:text; background-clip:text; color:transparent;">Every frame</span><br>
+                <em style="color:rgba(255,255,255,0.3); font-style:italic; font-weight:300;">a story</em><br>
+                <span style="color:rgba(255,255,255,0.12); font-weight:600;">waiting to develop.</span>
+            </h1>
+            <p style="color:rgba(255,255,255,0.45); font-size:1rem; line-height:1.7; max-width:480px; margin-bottom:3rem;">
+                Hover over any image to watch it develop — like a photograph emerging from the darkroom.
+            </p>
+        </div>
+
+        <!-- Legend -->
+        <div class="reveal" style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:32px; height:20px; border-radius:4px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center;">
+                    <div style="width:18px; height:10px; border-radius:2px; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.2);"></div>
+                </div>
+                <span style="font-family:'Syne',sans-serif; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3);">Undeveloped</span>
+            </div>
+            <span style="color:rgba(255,255,255,0.12);">→</span>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:32px; height:20px; border-radius:4px; background:linear-gradient(135deg, #3a4a6a, #6a8a4a); border:1px solid rgba(201,168,76,0.3);"></div>
+                <span style="font-family:'Syne',sans-serif; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.3);">Hover to develop</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════ MARQUEE ══════════════════ -->
+<div style="overflow:hidden; padding:0.5rem 0; border-top:1px solid rgba(201,168,76,0.06); border-bottom:1px solid rgba(201,168,76,0.06);">
+    <div class="marquee-track">
+        <span class="marquee-item">Corporate <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Lifestyle <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Maternity <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Brand <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Moving Image <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Mining & Industrial <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Corporate <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Lifestyle <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Maternity <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Brand <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Moving Image <span class="marquee-dot">◈</span></span>
+        <span class="marquee-item">Mining & Industrial <span class="marquee-dot">◈</span></span>
+    </div>
+</div>
+
+<!-- ══════════════════ FILTER BAR ══════════════════ -->
+<div style="padding:4rem 0 0;">
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-cat="all"><span>All Work</span></button>
+        <button class="filter-btn" data-cat="corporate"><span>Corporate</span></button>
+        <button class="filter-btn" data-cat="lifestyle"><span>Lifestyle</span></button>
+        <button class="filter-btn" data-cat="maternity"><span>Maternity</span></button>
+        <button class="filter-btn" data-cat="brand"><span>Brand</span></button>
+        <button class="filter-btn" data-cat="mining"><span>Mining & Industrial</span></button>
+    </div>
+</div>
+
+<!-- ══════════════════ GALLERY GRID ══════════════════ -->
+<main class="gallery-grid" id="galleryGrid">
+
+    <!-- CORPORATE -->
+    <div class="film-frame" data-cat="corporate" data-title="Executive Headshot" data-meta="Corporate · John Doe · 2024" data-src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=90&w=800&auto=format&fit=crop" alt="Executive Headshot" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Corporate</div>
+        <div class="film-info">
+            <div class="film-title">Executive<br><em>Headshot</em></div>
+            <div class="film-meta">Corporate · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="lifestyle" data-title="Golden Hour Portrait" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=90&w=800&auto=format&fit=crop" alt="Golden Hour Portrait" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Lifestyle</div>
+        <div class="film-info">
+            <div class="film-title">Golden Hour<br><em>Portrait</em></div>
+            <div class="film-meta">Lifestyle · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="maternity" data-title="New Beginnings" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1516733968668-dbdce39c4651?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1516733968668-dbdce39c4651?q=90&w=800&auto=format&fit=crop" alt="New Beginnings" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Maternity</div>
+        <div class="film-info">
+            <div class="film-title">New<br><em>Beginnings</em></div>
+            <div class="film-meta">Maternity · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="corporate" data-title="Team Portrait" data-meta="Corporate · ASSMANG · 2023" data-src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=90&w=800&auto=format&fit=crop" alt="Team Portrait" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Corporate</div>
+        <div class="film-info">
+            <div class="film-title">Leadership<br><em>Team</em></div>
+            <div class="film-meta">Corporate · ASSMANG · 2023</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="brand" data-title="Brand Campaign" data-meta="Brand · AngloAmerican · 2024" data-src="https://images.unsplash.com/photo-1560264280-88b68371db39?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1560264280-88b68371db39?q=90&w=800&auto=format&fit=crop" alt="Brand Campaign" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Brand</div>
+        <div class="film-info">
+            <div class="film-title">Brand<br><em>Campaign</em></div>
+            <div class="film-meta">Brand · AngloAmerican · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="lifestyle" data-title="City Portraits" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=90&w=800&auto=format&fit=crop" alt="City Portraits" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Lifestyle</div>
+        <div class="film-info">
+            <div class="film-title">City<br><em>Portraits</em></div>
+            <div class="film-meta">Lifestyle · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="mining" data-title="Iron Ore Operations" data-meta="Mining · Kumba Iron Ore · 2023" data-src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=90&w=800&auto=format&fit=crop" alt="Mining Operations" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Mining</div>
+        <div class="film-info">
+            <div class="film-title">Iron Ore<br><em>Operations</em></div>
+            <div class="film-meta">Mining · Kumba Iron Ore · 2023</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="maternity" data-title="Tender Moments" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?q=90&w=800&auto=format&fit=crop" alt="Tender Moments" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Maternity</div>
+        <div class="film-info">
+            <div class="film-title">Tender<br><em>Moments</em></div>
+            <div class="film-meta">Maternity · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="corporate" data-title="Professional Portrait" data-meta="Corporate · 2024" data-src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=90&w=800&auto=format&fit=crop" alt="Professional Portrait" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Corporate</div>
+        <div class="film-info">
+            <div class="film-title">Professional<br><em>Portrait</em></div>
+            <div class="film-meta">Corporate · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="lifestyle" data-title="Natural Light" data-meta="Lifestyle · 2023" data-src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=90&w=800&auto=format&fit=crop" alt="Natural Light" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Lifestyle</div>
+        <div class="film-info">
+            <div class="film-title">Natural<br><em>Light</em></div>
+            <div class="film-meta">Lifestyle · 2023</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="brand" data-title="Workspace Narrative" data-meta="Brand · 2024" data-src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=90&w=800&auto=format&fit=crop" alt="Workspace" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Brand</div>
+        <div class="film-info">
+            <div class="film-title">Workspace<br><em>Narrative</em></div>
+            <div class="film-meta">Brand · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="mining" data-title="Site Documentation" data-meta="Mining · ASSMANG · 2023" data-src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=90&w=800&auto=format&fit=crop" alt="Site Documentation" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Mining</div>
+        <div class="film-info">
+            <div class="film-title">Site<br><em>Documentation</em></div>
+            <div class="film-meta">Mining · ASSMANG · 2023</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="corporate" data-title="Director Portrait" data-meta="Corporate · 2023" data-src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=90&w=800&auto=format&fit=crop" alt="Director Portrait" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Corporate</div>
+        <div class="film-info">
+            <div class="film-title">Director<br><em>Portrait</em></div>
+            <div class="film-meta">Corporate · 2023</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="lifestyle" data-title="Outdoor Session" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=90&w=800&auto=format&fit=crop" alt="Outdoor Session" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Lifestyle</div>
+        <div class="film-info">
+            <div class="film-title">Outdoor<br><em>Session</em></div>
+            <div class="film-meta">Lifestyle · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="brand" data-title="Product Identity" data-meta="Brand · 2024" data-src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=90&w=800&auto=format&fit=crop" alt="Product Identity" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Brand</div>
+        <div class="film-info">
+            <div class="film-title">Product<br><em>Identity</em></div>
+            <div class="film-meta">Brand · 2024</div>
+        </div>
+    </div>
+
+    <div class="film-frame" data-cat="maternity" data-title="Family First" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?q=90&w=800&auto=format&fit=crop">
+        <div class="film-img-wrap">
+            <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?q=90&w=800&auto=format&fit=crop" alt="Family First" loading="lazy">
+            <div class="film-grain"></div>
+            <div class="film-vignette"></div>
+        </div>
+        <div class="film-sprocket left"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-sprocket right"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div>
+        <div class="film-badge">Maternity</div>
+        <div class="film-info">
+            <div class="film-title">Family<br><em>First</em></div>
+            <div class="film-meta">Maternity · 2024</div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ══════════════════ FILMSTRIP FEATURED ══════════════════ -->
+<section class="filmstrip-section reveal">
+    <div class="filmstrip-label">
+        <p class="section-label" style="margin-bottom:0.5rem;">Featured series</p>
+        <h2 class="font-display" style="font-size:clamp(2rem,4vw,3.5rem); font-weight:300; color:rgba(255,255,255,0.9);">
+            Scroll to <em style="color:var(--gold);">discover</em>
+        </h2>
+    </div>
+    <div class="filmstrip-scroll" id="filmStrip">
+
+        <div class="strip-card" style="width:260px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=90&w=600&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=90&w=600&auto=format&fit=crop" alt="Series 01">
+            <div class="strip-card-label">ASSMANG<br>Series I</div>
+        </div>
+
+        <div class="strip-card" style="width:320px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=90&w=700&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=90&w=700&auto=format&fit=crop" alt="Lifestyle Series">
+            <div class="strip-card-label">Golden<br>Lifestyle</div>
+        </div>
+
+        <div class="strip-card" style="width:240px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=90&w=500&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=90&w=500&auto=format&fit=crop" alt="Portrait Series">
+            <div class="strip-card-label">Northern<br>Portraits</div>
+        </div>
+
+        <div class="strip-card" style="width:340px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1569982175971-d92b01cf8694?q=90&w=700&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1569982175971-d92b01cf8694?q=90&w=700&auto=format&fit=crop" alt="Corporate Wide">
+            <div class="strip-card-label">Anglo<br>Series</div>
+        </div>
+
+        <div class="strip-card" style="width:280px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=90&w=600&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=90&w=600&auto=format&fit=crop" alt="Maternity Series">
+            <div class="strip-card-label">New<br>Life</div>
+        </div>
+
+        <div class="strip-card" style="width:300px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=90&w=600&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=90&w=600&auto=format&fit=crop" alt="Gents Portrait">
+            <div class="strip-card-label">Gents<br>Portraits</div>
+        </div>
+
+        <div class="strip-card" style="width:260px; height:380px;"
+             data-src="https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=90&w=600&auto=format&fit=crop">
+            <img src="https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=90&w=600&auto=format&fit=crop" alt="Site Docs">
+            <div class="strip-card-label">Site<br>Series</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════ CTA ══════════════════ -->
+<section class="gallery-cta">
+    <div style="position:relative; z-index:1; max-width:700px; margin:0 auto;">
+        <div class="reveal">
+            <p class="section-label" style="margin-bottom:1.5rem;">Ready to create?</p>
+            <h2 class="font-display" style="font-size:clamp(2.5rem,6vw,5.5rem); font-weight:300; line-height:1.05; margin-bottom:2rem;">
+                <span style="background:linear-gradient(135deg,#fff,var(--gold-light)); -webkit-background-clip:text; background-clip:text; color:transparent;">Your story</span><br>
+                <em style="color:rgba(255,255,255,0.25);">deserves the</em><br>
+                <span style="background:linear-gradient(135deg,var(--gold),var(--amber)); -webkit-background-clip:text; background-clip:text; color:transparent;">perfect frame</span>
+            </h2>
+            <p style="color:rgba(255,255,255,0.4); font-size:1rem; line-height:1.7; margin-bottom:3rem;">
+                Based in Kathu, Northern Cape. Serving Southern Africa — and beyond.
+            </p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="index.html#contact" class="btn-gold" style="font-size:0.8rem; padding:0.9rem 2.5rem;">Book a Session</a>
+                <a href="index.html" style="font-family:'Syne',sans-serif; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; padding:0.9rem 2.2rem; border-radius:999px; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); text-decoration:none; transition:all 0.3s; cursor:none; display:inline-block;">Back Home</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer style="border-top:1px solid rgba(255,255,255,0.06); padding:2.5rem 3rem; background:rgba(4,2,15,0.8);">
+    <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem;">
+        <span class="font-display" style="font-size:1.3rem; color:var(--gold-light);">Jay Roman Media</span>
+        <p style="font-size:0.7rem; color:rgba(255,255,255,0.2);">© 2025 Jay Roman Media — all rights reserved</p>
+    </div>
+</footer>
+
+<!-- ══════════════════ LIGHTBOX ══════════════════ -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+        <button class="lb-nav-btn prev" id="lbPrev">←</button>
+        <div class="lightbox-img-wrap">
+            <button class="lightbox-close" id="lbClose">✕ Close</button>
+            <img src="" alt="" id="lbImg">
+        </div>
+        <div class="lightbox-info" id="lbInfo">
+            <p class="section-label" style="margin-bottom:1rem;">Selected Frame</p>
+            <h3 class="font-display" id="lbTitle" style="font-size:2.2rem; font-weight:400; color:var(--gold-light); line-height:1.1; margin-bottom:0.75rem;"></h3>
+            <p id="lbMeta" style="font-family:'Syne',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:2rem;"></p>
+            <div style="width:40px; height:1px; background:rgba(201,168,76,0.3); margin-bottom:2rem;"></div>
+            <a href="index.html#contact" class="btn-gold" style="font-size:0.7rem; padding:0.8rem 1.8rem;">Commission Similar</a>
+        </div>
+        <button class="lb-nav-btn next" id="lbNext">→</button>
+    </div>
+</div>
+
+<!-- floating pill -->
+<div style="position:fixed;bottom:2rem;right:2rem;border-radius:999px;padding:0.6rem 1.4rem;z-index:90;border:1px solid rgba(201,168,76,0.2);background:rgba(8,5,32,0.7);backdrop-filter:blur(20px);">
+    <span style="font-family:'Syne',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.6);">hover to develop</span>
+</div>
+
+<script>
+// ── CURSOR ──
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+const cursorText = document.getElementById('cursorText');
+let mouseX = 0, mouseY = 0;
+
+document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+    setTimeout(() => {
+        ring.style.left = mouseX + 'px';
+        ring.style.top = mouseY + 'px';
+        cursorText.style.left = mouseX + 'px';
+        cursorText.style.top = (mouseY + 28) + 'px';
+    }, 60);
+});
+
+document.querySelectorAll('.film-frame').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        ring.style.transform = 'translate(-50%,-50%) scale(3)';
+        ring.style.borderColor = 'rgba(201,168,76,0.6)';
+        cursorText.style.opacity = '1';
+    });
+    el.addEventListener('mouseleave', () => {
+        ring.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.borderColor = 'rgba(201,168,76,0.5)';
+        cursorText.style.opacity = '0';
+    });
+});
+
+document.querySelectorAll('a,button,.filter-btn,.strip-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        ring.style.transform = 'translate(-50%,-50%) scale(1.6)';
+        ring.style.borderColor = 'rgba(201,168,76,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+        ring.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.borderColor = 'rgba(201,168,76,0.5)';
+    });
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── EXPOSURE COUNTER (scroll-driven) ──
+const expCount = document.getElementById('expCount');
+const frames = document.querySelectorAll('.film-frame');
+const scrollObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            const idx = Array.from(frames).indexOf(e.target) + 1;
+            expCount.textContent = String(idx).padStart(2, '0');
+        }
+    });
+}, { threshold: 0.5 });
+frames.forEach(f => scrollObs.observe(f));
+
+// ── FILTER ──
+const filterBtns = document.querySelectorAll('.filter-btn');
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        frames.forEach(frame => {
+            const match = cat === 'all' || frame.dataset.cat === cat;
+            frame.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            if (match) {
+                frame.style.opacity = '1';
+                frame.style.transform = 'scale(1)';
+                frame.style.pointerEvents = 'all';
+            } else {
+                frame.style.opacity = '0.1';
+                frame.style.transform = 'scale(0.96)';
+                frame.style.pointerEvents = 'none';
+            }
+        });
+    });
+});
+
+// ── LIGHTBOX ──
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbTitle = document.getElementById('lbTitle');
+const lbMeta = document.getElementById('lbMeta');
+const lbClose = document.getElementById('lbClose');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+
+let currentIndex = 0;
+let visibleFrames = [];
+
+function openLightbox(index) {
+    visibleFrames = Array.from(frames).filter(f => f.style.opacity !== '0.1');
+    currentIndex = index;
+    const frame = visibleFrames[currentIndex];
+    if (!frame) return;
+    lbImg.src = frame.dataset.src;
+    lbTitle.innerHTML = frame.dataset.title.replace(' ', '<br><em>') + '</em>';
+    lbMeta.textContent = frame.dataset.meta;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+frames.forEach((frame, i) => {
+    frame.addEventListener('click', () => {
+        const allFrames = Array.from(frames).filter(f => f.style.opacity !== '0.1');
+        const idx = allFrames.indexOf(frame);
+        openLightbox(idx);
+    });
+});
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+lbClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+lbPrev.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + visibleFrames.length) % visibleFrames.length;
+    const frame = visibleFrames[currentIndex];
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+        lbImg.src = frame.dataset.src;
+        lbTitle.innerHTML = frame.dataset.title + '</em>';
+        lbMeta.textContent = frame.dataset.meta;
+        lbImg.style.opacity = '1';
+    }, 200);
+});
+
+lbNext.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % visibleFrames.length;
+    const frame = visibleFrames[currentIndex];
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+        lbImg.src = frame.dataset.src;
+        lbTitle.innerHTML = frame.dataset.title + '</em>';
+        lbMeta.textContent = frame.dataset.meta;
+        lbImg.style.opacity = '1';
+    }, 200);
+});
+
+document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev.click();
+    if (e.key === 'ArrowRight') lbNext.click();
+});
+
+lbImg.style.transition = 'opacity 0.2s ease';
+
+// ── FILMSTRIP DRAG ──
+const strip = document.getElementById('filmStrip');
+let isDown = false, startX, scrollLeft;
+strip.addEventListener('mousedown', e => {
+    isDown = true; strip.style.cursor = 'grabbing';
+    startX = e.pageX - strip.offsetLeft;
+    scrollLeft = strip.scrollLeft;
+});
+strip.addEventListener('mouseleave', () => { isDown = false; });
+strip.addEventListener('mouseup', () => { isDown = false; strip.style.cursor = 'none'; });
+strip.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const x = e.pageX - strip.offsetLeft;
+    strip.scrollLeft = scrollLeft - (x - startX) * 1.5;
+});
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.background = window.scrollY > 60
+        ? 'rgba(8,5,32,0.97)' : 'rgba(8,5,32,0.92)';
+});
+</script>
+</body>
+</html>
