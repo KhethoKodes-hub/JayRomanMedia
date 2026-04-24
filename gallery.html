@@ -96,6 +96,7 @@
         .gallery-hero {
             padding: 8rem 3rem 4rem;
             position: relative; overflow: hidden;
+            background-image: url('./assets/galleryhero.jpeg'); background-size: cover; background-position: center;
         }
         .gallery-hero::before {
             content: 'GALLERY';
@@ -506,8 +507,9 @@
         <div class="nav-links" style="display:flex; gap:2.5rem;">
             <a href="index.html" class="nav-link">Home</a>
             <a href="services.html" class="nav-link">Services</a>
-            <a href="gallery.html" class="nav-link" style="color:var(--gold);">Gallery</a>
             <a href="about.html" class="nav-link">About</a>
+                        <a href="gallery.html" class="nav-link" style="color:var(--gold);">Gallery</a>
+
             <a href="contact.html" class="nav-link">Contact</a>
         </div>
         <a href="index.html#contact" class="btn-gold">Book Session</a>
@@ -546,8 +548,8 @@
     </div>
 </section>
 
-<!-- ══════════════════ MARQUEE ══════════════════ -->
-<div style="overflow:hidden; padding:0.5rem 0; border-top:1px solid rgba(201,168,76,0.06); border-bottom:1px solid rgba(201,168,76,0.06);">
+
+<!--<div style="overflow:hidden; padding:0.5rem 0; border-top:1px solid rgba(201,168,76,0.06); border-bottom:1px solid rgba(201,168,76,0.06);">
     <div class="marquee-track">
         <span class="marquee-item">Corporate <span class="marquee-dot">◈</span></span>
         <span class="marquee-item">Lifestyle <span class="marquee-dot">◈</span></span>
@@ -562,7 +564,7 @@
         <span class="marquee-item">Moving Image <span class="marquee-dot">◈</span></span>
         <span class="marquee-item">Mining & Industrial <span class="marquee-dot">◈</span></span>
     </div>
-</div>
+</div>-->
 
 <!-- ══════════════════ FILTER BAR ══════════════════ -->
 <div style="padding:4rem 0 0;">
@@ -580,9 +582,9 @@
 <main class="gallery-grid" id="galleryGrid">
 
     <!-- CORPORATE -->
-    <div class="film-frame" data-cat="corporate" data-title="Executive Headshot" data-meta="Corporate · John Doe · 2024" data-src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="corporate" data-title="Executive Headshot" data-meta="Corporate · John Doe · 2024" data-src="assets/cp3.JPG">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=90&w=800&auto=format&fit=crop" alt="Executive Headshot" loading="lazy">
+            <img src="assets/cp3.JPG" alt="Executive Headshot" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -595,9 +597,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="lifestyle" data-title="Golden Hour Portrait" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="lifestyle" data-title="Golden Hour Portrait" data-meta="Lifestyle · 2024" data-src="assets/goldenhour.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=90&w=800&auto=format&fit=crop" alt="Golden Hour Portrait" loading="lazy">
+            <img src="assets/goldenhour.jpg" alt="Golden Hour Portrait" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -610,9 +612,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="maternity" data-title="New Beginnings" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1516733968668-dbdce39c4651?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="maternity" data-title="New Beginnings" data-meta="Maternity · 2024" data-src="ssets/maternity2.jpeg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1516733968668-dbdce39c4651?q=90&w=800&auto=format&fit=crop" alt="New Beginnings" loading="lazy">
+            <img src="assets/maternity2.jpeg" alt="New Beginnings" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -625,9 +627,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="corporate" data-title="Team Portrait" data-meta="Corporate · ASSMANG · 2023" data-src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="corporate" data-title="Team Portrait" data-meta="Corporate · ASSMANG · 2023" data-src="assets/leadershipteam.JPG">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=90&w=800&auto=format&fit=crop" alt="Team Portrait" loading="lazy">
+            <img src="assets/leadershipteam.JPG" alt="Team Portrait" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -640,9 +642,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="brand" data-title="Brand Campaign" data-meta="Brand · AngloAmerican · 2024" data-src="https://images.unsplash.com/photo-1560264280-88b68371db39?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="brand" data-title="Brand Campaign" data-meta="Brand · AngloAmerican · 2024" data-src="assets/brandcamp.jpeg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1560264280-88b68371db39?q=90&w=800&auto=format&fit=crop" alt="Brand Campaign" loading="lazy">
+            <img src="assets/brandcamp.jpeg" alt="Brand Campaign" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -655,9 +657,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="lifestyle" data-title="City Portraits" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="lifestyle" data-title="City Portraits" data-meta="Lifestyle · 2024" data-src="assets/cp2.jpeg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=90&w=800&auto=format&fit=crop" alt="City Portraits" loading="lazy">
+            <img src="assets/cp2.jpeg" alt="City Portraits" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -670,9 +672,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="mining" data-title="Iron Ore Operations" data-meta="Mining · Kumba Iron Ore · 2023" data-src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="mining" data-title="Iron Ore Operations" data-meta="Mining · Kumba Iron Ore · 2023" data-src="assets/onsite4.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=90&w=800&auto=format&fit=crop" alt="Mining Operations" loading="lazy">
+            <img src="assets/onsite4.jpg" alt="Mining Operations" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -685,9 +687,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="maternity" data-title="Tender Moments" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="maternity" data-title="Tender Moments" data-meta="Maternity · 2024" data-src="assets/maternity3.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?q=90&w=800&auto=format&fit=crop" alt="Tender Moments" loading="lazy">
+            <img src="assets/maternity3.jpg" alt="Tender Moments" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -700,9 +702,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="corporate" data-title="Professional Portrait" data-meta="Corporate · 2024" data-src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=90&w=800&auto=format&fit=crop">
-        <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=90&w=800&auto=format&fit=crop" alt="Professional Portrait" loading="lazy">
+                <div class="film-frame" data-cat="corporate" data-title="Professional Portrait" data-meta="Corporate · 2024" data-src="assets/cp4.jpg">
+                    <div class="film-img-wrap">
+            <img src="assets/cp4.jpg" alt="Professional Portrait" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -715,9 +717,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="lifestyle" data-title="Natural Light" data-meta="Lifestyle · 2023" data-src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="lifestyle" data-title="Natural Light" data-meta="Lifestyle · 2023" data-src="assets/Naturallight.jpeg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=90&w=800&auto=format&fit=crop" alt="Natural Light" loading="lazy">
+            <img src="assets/Naturallight.jpeg" alt="Natural Light" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -730,9 +732,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="brand" data-title="Workspace Narrative" data-meta="Brand · 2024" data-src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="brand" data-title="Workspace Narrative" data-meta="Brand · 2024" data-src="assets/narrative.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=90&w=800&auto=format&fit=crop" alt="Workspace" loading="lazy">
+            <img src="assets/narrative.jpg" alt="Workspace" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -745,9 +747,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="mining" data-title="Site Documentation" data-meta="Mining · ASSMANG · 2023" data-src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="mining" data-title="Site Documentation" data-meta="Mining · ASSMANG · 2023" data-src="assets/sitedocument.jpeg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=90&w=800&auto=format&fit=crop" alt="Site Documentation" loading="lazy">
+            <img src="assets/sitedocument.jpeg" alt="Site Documentation" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -760,9 +762,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="corporate" data-title="Director Portrait" data-meta="Corporate · 2023" data-src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="corporate" data-title="Director Portrait" data-meta="Corporate · 2023" data-src="assets/cp1.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=90&w=800&auto=format&fit=crop" alt="Director Portrait" loading="lazy">
+            <img src="assets/cp1.jpg" alt="Director Portrait" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -775,9 +777,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="lifestyle" data-title="Outdoor Session" data-meta="Lifestyle · 2024" data-src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="lifestyle" data-title="Outdoor Session" data-meta="Lifestyle · 2024" data-src="assets/outdoor.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=90&w=800&auto=format&fit=crop" alt="Outdoor Session" loading="lazy">
+            <img src="assets/outdoor.jpg" alt="Outdoor Session" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -790,9 +792,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="brand" data-title="Product Identity" data-meta="Brand · 2024" data-src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="brand" data-title="Product Identity" data-meta="Brand · 2024" data-src="assets/productID.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=90&w=800&auto=format&fit=crop" alt="Product Identity" loading="lazy">
+            <img src="assets/productID.jpg" alt="Product Identity" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -805,9 +807,9 @@
         </div>
     </div>
 
-    <div class="film-frame" data-cat="maternity" data-title="Family First" data-meta="Maternity · 2024" data-src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?q=90&w=800&auto=format&fit=crop">
+    <div class="film-frame" data-cat="maternity" data-title="Family First" data-meta="Maternity · 2024" data-src="assets/maternity4.jpg">
         <div class="film-img-wrap">
-            <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?q=90&w=800&auto=format&fit=crop" alt="Family First" loading="lazy">
+            <img src="assets/maternity4.jpg" alt="Family First" loading="lazy">
             <div class="film-grain"></div>
             <div class="film-vignette"></div>
         </div>
@@ -833,44 +835,44 @@
     <div class="filmstrip-scroll" id="filmStrip">
 
         <div class="strip-card" style="width:260px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=90&w=600&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=90&w=600&auto=format&fit=crop" alt="Series 01">
+             data-src="assets/assmang.jpg">
+            <img src="assets/assmang.jpg" alt="Series 01">
             <div class="strip-card-label">ASSMANG<br>Series I</div>
         </div>
 
         <div class="strip-card" style="width:320px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=90&w=700&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=90&w=700&auto=format&fit=crop" alt="Lifestyle Series">
+             data-src="assets/goldenlifestyle.JPG">
+            <img src="assets/goldenlifestyle.JPG" alt="Lifestyle Series">
             <div class="strip-card-label">Golden<br>Lifestyle</div>
         </div>
 
         <div class="strip-card" style="width:240px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=90&w=500&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=90&w=500&auto=format&fit=crop" alt="Portrait Series">
+             data-src="assets/northernportraits.jpg">
+            <img src="assets/northernportraits.jpg" alt="Portrait Series">
             <div class="strip-card-label">Northern<br>Portraits</div>
         </div>
 
         <div class="strip-card" style="width:340px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1569982175971-d92b01cf8694?q=90&w=700&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1569982175971-d92b01cf8694?q=90&w=700&auto=format&fit=crop" alt="Corporate Wide">
+             data-src="assets/angloseries.jpg">
+            <img src="assets/angloseries.jpg" alt="Corporate Wide">
             <div class="strip-card-label">Anglo<br>Series</div>
         </div>
 
         <div class="strip-card" style="width:280px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=90&w=600&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?q=90&w=600&auto=format&fit=crop" alt="Maternity Series">
+             data-src="assets/newlife.jpeg">
+            <img src="assets/newlife.jpeg" alt="Maternity Series">
             <div class="strip-card-label">New<br>Life</div>
         </div>
 
         <div class="strip-card" style="width:300px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=90&w=600&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=90&w=600&auto=format&fit=crop" alt="Gents Portrait">
+             data-src="assets/gentsportrait.jpg">
+            <img src="assets/gentsportrait.jpg" alt="Gents Portrait">
             <div class="strip-card-label">Gents<br>Portraits</div>
         </div>
 
         <div class="strip-card" style="width:260px; height:380px;"
-             data-src="https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=90&w=600&auto=format&fit=crop">
-            <img src="https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=90&w=600&auto=format&fit=crop" alt="Site Docs">
+             data-src="assets/siteseries.jpeg">
+            <img src="assets/siteseries.jpeg" alt="Site Docs">
             <div class="strip-card-label">Site<br>Series</div>
         </div>
 
